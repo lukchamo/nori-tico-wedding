@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { WEDDING } from "@/lib/config";
 import "./video.css";
 
 const VIDEO = "/media/cooweb/reel-norida-agustin.mp4";
@@ -39,6 +40,9 @@ export default function DeCooWeb() {
             Descargar en alta calidad
           </a>
         </div>
+        <a className="dc-link" href={`${WEDDING.music.download}?descargar`}>
+          🎵 Descargar la música del video (MP3)
+        </a>
         <a className="dc-link" href="/">
           Ver la invitación →
         </a>

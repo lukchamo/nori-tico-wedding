@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { envelopeBurst } from "@/lib/effects";
+import { OPEN_EVENT } from "./Music";
 
 type Props = {
   mode: "invitacion" | "participacion";
@@ -28,6 +29,7 @@ export function Cover({ mode, guestName, trackCode }: Props) {
   const open = () => {
     if (opened) return;
     setOpened(true);
+    window.dispatchEvent(new Event(OPEN_EVENT)); // dentro del toque: así el navegador deja sonar la música
     setTimeout(() => envelopeBurst(envelope.current), 450);
     setTimeout(() => setGone(true), 1300);
   };
@@ -60,6 +62,7 @@ export function Cover({ mode, guestName, trackCode }: Props) {
       <div className="inv-cover-hint">
         <div className="display">Toca el sobre</div>
         <div className="serif">{hint}</div>
+        <div className="inv-cover-sound">♪ Con música · sube el volumen</div>
       </div>
 
       <div className="inv-cover-bottom script">Norida &amp; Agustín</div>

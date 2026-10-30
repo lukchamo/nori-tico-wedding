@@ -5,6 +5,7 @@ import { Cover } from "./Cover";
 import { DressCodeSwatches } from "./DressCode";
 import { FxLink } from "./FxLink";
 import { GiftEnvelope } from "./Gift";
+import { MusicButton } from "./Music";
 import { GiftIcon, HeartDot, HeartOutline, SmallSprig, Sprig } from "./Ornaments";
 import { Rsvp } from "./Rsvp";
 
@@ -149,17 +150,6 @@ function DesktopAside({ mode, guestName }: { mode: Props["mode"]; guestName: str
         <div className="serif inv-aside-hint">Desliza la tarjeta para ver toda la invitación →</div>
       </div>
     </aside>
-  );
-}
-
-function MusicButton() {
-  return (
-    <FxLink fx="notes" href={WEDDING.spotifyUrl} target="_blank" rel="noopener" className="inv-music" aria-label="Escuchar nuestra canción en Spotify">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4B5A2F" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M9 18V5l12-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM21 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-      </svg>
-      <span>Música</span>
-    </FxLink>
   );
 }
 

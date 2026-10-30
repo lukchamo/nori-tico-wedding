@@ -17,6 +17,12 @@ export const WEDDING = {
     mapsUrl: "https://www.google.com/maps/search/?api=1&query=Le%20Grand",
   },
   spotifyUrl: "https://open.spotify.com/track/5fF0fb0VFihGDHFshDLi2Z?si=-EKuKqRlQU6GJk_LniLdEw",
+  songTitle: "Mi Bendición",
+  /** Música de fondo de la tarjeta (en R2). Para cambiarla: subir otro archivo con otro nombre y actualizar `src`. */
+  music: {
+    src: "/media/musica/fondo-v1.mp3",
+    download: "/media/musica/musica-boda-cooweb.mp3",
+  },
   calendarUrl:
     "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda%20de%20Norida%20%26%20Agust%C3%ADn&dates=20261227T150000Z/20261227T230000Z&details=Ceremonia%20cat%C3%B3lica%2C%20%C3%ADntima%20entre%20familia%20y%20amigos%20cercanos.&location=Iglesia%20Nuestra%20Se%C3%B1ora%20de%20la%20Caridad%20del%20Cobre",
   gift: {

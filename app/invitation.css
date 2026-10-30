@@ -53,8 +53,8 @@
   z-index: 200;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 9px 14px;
+  gap: 0;
+  padding: 3px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.85);
   box-shadow: 0 4px 14px rgba(60, 60, 20, 0.2);
@@ -70,11 +70,81 @@ html[data-sticky-bar="1"] .inv-music {
     right: calc(50% - 240px + 18px);
   }
 }
-.inv-music span {
+.inv-music-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 32px;
+  padding: 6px 9px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.inv-music-toggle.is-on {
+  background: rgba(75, 90, 47, 0.1);
+}
+.inv-music-toggle span:not(.inv-music-bars) {
   font-size: 10px;
   letter-spacing: 1px;
   text-transform: uppercase;
   color: #4b5a2f;
+}
+/* Celulares angostos: solo íconos, para no tapar el encabezado de la portada. */
+@media (max-width: 379px) {
+  .inv-music-toggle span:not(.inv-music-bars) {
+    display: none;
+  }
+}
+.inv-music-song {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 32px;
+  border-radius: 50%;
+}
+.inv-music-song:hover,
+.inv-music-toggle:hover {
+  background: rgba(75, 90, 47, 0.08);
+}
+.inv-music-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  width: 14px;
+  height: 12px;
+}
+.inv-music-bars i {
+  flex: 1;
+  height: 100%;
+  border-radius: 1px;
+  background: #4b5a2f;
+  transform-origin: bottom;
+  animation: inv-eq 0.9s ease-in-out infinite;
+}
+.inv-music-bars i:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.inv-music-bars i:nth-child(3) {
+  animation-delay: -0.6s;
+}
+@keyframes inv-eq {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .inv-music-bars i {
+    animation: none;
+    transform: scaleY(0.7);
+  }
 }
 
 /* ---------- Portada / sobre ---------- */
@@ -235,6 +305,12 @@ html[data-sticky-bar="1"] .inv-music {
   font-size: 16px;
   font-style: italic;
   color: #6e7c4d;
+}
+.inv-cover-sound {
+  margin-top: 4px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: #8a9a6b;
 }
 
 /* ---------- Secciones genéricas ---------- */
