@@ -24,6 +24,7 @@ export function InvitationPage({ mode, invitation = null, legacyName, legacySeat
 
   return (
     <div className="inv-root">
+      <DesktopAside mode={mode} guestName={full ? guestName : null} />
       <div className="inv-card">
         <MusicButton />
         <Cover mode={mode} guestName={full ? guestName : null} trackCode={invitation && !preview ? invitation.code : null} />
@@ -33,7 +34,7 @@ export function InvitationPage({ mode, invitation = null, legacyName, legacySeat
           <Quote />
           <Story />
 
-          <div className="inv-countdown-wrap">
+          <div className="inv-countdown-wrap" id="ceremonia">
             <div className="inv-countdown">
               <Sprig variant="dark" />
               <div className="script inv-countdown-title">Falta poco</div>
@@ -48,7 +49,7 @@ export function InvitationPage({ mode, invitation = null, legacyName, legacySeat
             <>
               <Reception />
               <Itinerary />
-              <div className="inv-screen inv-dress">
+              <div className="inv-screen inv-dress" id="vestimenta">
                 <Sprig variant="dark" />
                 <div className="inv-dress-eyebrow">Código de vestimenta</div>
                 <div className="script inv-dress-title">{WEDDING.dressCode}</div>
@@ -57,7 +58,7 @@ export function InvitationPage({ mode, invitation = null, legacyName, legacySeat
                 <div className="inv-dress-reserve">Nos reservamos el blanco y el marfil.</div>
               </div>
 
-              <div className="inv-confirm">
+              <div className="inv-confirm" id="confirmar">
                 <Sprig />
                 <div className="script inv-confirm-title">Confirma tu asistencia</div>
                 <div className="inv-confirm-lead">
@@ -73,7 +74,7 @@ export function InvitationPage({ mode, invitation = null, legacyName, legacySeat
                 <SmallSprig />
               </div>
 
-              <div className="inv-screen inv-gift">
+              <div className="inv-screen inv-gift" id="regalo">
                 <div className="inv-gift-inner">
                   <Sprig />
                   <GiftIcon />
@@ -95,6 +96,61 @@ export function InvitationPage({ mode, invitation = null, legacyName, legacySeat
         </div>
       </div>
     </div>
+  );
+}
+
+const ASIDE_LINKS = {
+  invitacion: [
+    ["#historia", "Nuestra historia"],
+    ["#ceremonia", "Ceremonia"],
+    ["#recepcion", "Recepción"],
+    ["#itinerario", "Itinerario"],
+    ["#vestimenta", "Vestimenta"],
+    ["#regalo", "Regalo"],
+  ],
+  participacion: [
+    ["#historia", "Nuestra historia"],
+    ["#ceremonia", "Ceremonia"],
+  ],
+} as const;
+
+/** Panel fijo de la vista de escritorio (oculto en móvil). */
+function DesktopAside({ mode, guestName }: { mode: Props["mode"]; guestName: string | null }) {
+  const eyebrow = mode === "participacion" ? "Participación de matrimonio" : guestName ? `Invitación para ${guestName}` : "Nos casamos";
+  return (
+    <aside className="inv-aside" aria-label="Resumen de la boda">
+      <div className="inv-aside-bg" />
+      <div className="inv-aside-inner">
+        <Sprig variant="photo" className="inv-aside-sprig" />
+        <div className="display inv-aside-eyebrow">{eyebrow}</div>
+        <div className="script inv-aside-names">Norida &amp; Agustín</div>
+        <div className="inv-heart-rule">
+          <div />
+          <HeartOutline size={18} />
+          <div />
+        </div>
+        <div className="display inv-aside-date">27 · 12 · 2026</div>
+        <div className="serif inv-aside-place">
+          Domingo 27 de diciembre · {WEDDING.ceremony.time}
+          <br />
+          {WEDDING.ceremony.place}
+        </div>
+        <CountdownBoxes className="inv-count-boxes inv-aside-count" />
+        <nav className="inv-aside-nav serif" aria-label="Secciones de la invitación">
+          {ASIDE_LINKS[mode].map(([href, label]) => (
+            <a key={href} href={href}>
+              {label}
+            </a>
+          ))}
+        </nav>
+        {mode === "invitacion" ? (
+          <a href="#confirmar" className="inv-aside-cta">
+            Confirmar asistencia
+          </a>
+        ) : null}
+        <div className="serif inv-aside-hint">Desliza la tarjeta para ver toda la invitación →</div>
+      </div>
+    </aside>
   );
 }
 
@@ -176,7 +232,7 @@ function Divider({ margin }: { margin?: string }) {
 
 function Story() {
   return (
-    <div className="inv-story">
+    <div className="inv-story" id="historia">
       <Sprig className="inv-sprig" />
       <div className="inv-eyebrow" style={{ marginTop: 14 }}>
         Nuestra historia
@@ -256,7 +312,7 @@ function Ceremony({ withDirections }: { withDirections: boolean }) {
 
 function Reception() {
   return (
-    <div className="inv-screen inv-reception">
+    <div className="inv-screen inv-reception" id="recepcion">
       <Sprig />
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/assets/icono-brindis.png" width={30} height={30} alt="Recepción" style={{ display: "block" }} />
@@ -330,7 +386,7 @@ const ITINERARY_ICONS: React.ReactNode[] = [
 
 function Itinerary() {
   return (
-    <div className="inv-itinerary">
+    <div className="inv-itinerary" id="itinerario">
       <Sprig />
       <div className="script inv-itinerary-title">Itinerario</div>
       <div className="inv-timeline">

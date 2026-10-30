@@ -48,4 +48,4 @@ export const WEDDING = {
 /** Costo estimado por plato (hoja "Invitados Matrimonio"), en COP. */
 export const PLATE_COST = { adult: 85_000, child: 50_000 } as const;
 
-export const FALLBACK_SITE_URL = "https://nori-tico-wedding.lc-45e.workers.dev";
+export const FALLBACK_SITE_URL = "https://noridayagustin.com";

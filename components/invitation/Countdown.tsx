@@ -24,7 +24,7 @@ function useCountdown() {
   };
 }
 
-export function CountdownBoxes() {
+export function CountdownBoxes({ className = "inv-count-boxes" }: { className?: string }) {
   const c = useCountdown();
   const items: [string, string][] = [
     [c.days, "Días"],
@@ -33,7 +33,7 @@ export function CountdownBoxes() {
     [c.seconds, "Seg"],
   ];
   return (
-    <div className="inv-count-boxes">
+    <div className={className}>
       {items.map(([v, l]) => (
         <div key={l}>
           <div className="inv-count-num display">{v}</div>
@@ -79,7 +79,7 @@ export function StickyDays() {
   return (
     <>
       <div ref={anchor}>{bar("inv-sticky")}</div>
-      {fixed ? bar("inv-sticky is-fixed") : null}
+      {fixed ? <div className="inv-fixed-lane">{bar("inv-sticky is-fixed")}</div> : null}
     </>
   );
 }

@@ -206,3 +206,18 @@
   padding: 0 16px 8px;
   font-style: italic;
 }
+
+/* Escritorio: el chat queda como una columna sobre la foto de la boda. */
+@media (min-width: 960px) {
+  .adv-root {
+    background-image:
+      linear-gradient(180deg, rgba(18, 20, 10, 0.7), rgba(34, 42, 20, 0.82)),
+      url("/assets/galeria-cita-fondo.jpg");
+    background-size: cover;
+    background-position: center 30%;
+    background-attachment: fixed;
+  }
+  .adv-card {
+    box-shadow: 0 0 80px rgba(0, 0, 0, 0.45);
+  }
+}

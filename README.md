@@ -2,13 +2,13 @@
 
 Invitación digital (recreación fiel de la tarjeta original en HTML) convertida a **Next.js 16** y desplegada en **Cloudflare Workers** con **OpenNext**, base de datos **D1 + Drizzle ORM**, asistente de outfits con **Workers AI** y un **backoffice tipo CRM** para gestionar invitados.
 
-Producción: https://nori-tico-wedding.lc-45e.workers.dev
+Producción: **https://noridayagustin.com** (dominio propio del Worker; `www.noridayagustin.com` y `nori-tico-wedding.lc-45e.workers.dev` redirigen con 308 al dominio principal).
 
 ## Rutas
 
 | Ruta | Qué es |
 | --- | --- |
-| `/` | Invitación completa (sobre animado, historia, cuenta regresiva, ceremonia, recepción, itinerario, código de vestimenta, confirmación, lluvia de sobres). Acepta los enlaces antiguos `?nombre=…&cupos=…`. |
+| `/` | Invitación completa (sobre animado, historia, cuenta regresiva, ceremonia, recepción, itinerario, código de vestimenta, confirmación, lluvia de sobres). Acepta los enlaces antiguos `?nombre=…&cupos=…`. En escritorio (≥ 960 px) se muestra en dos columnas: panel fijo con nombres, fecha, cuenta regresiva y menú de secciones a la izquierda, y la tarjeta a la derecha. |
 | `/i/[código]` | Invitación personalizada: nombre en el sobre, cupos asignados, confirmación por persona y registro de aperturas. `?preview=1` no cuenta como apertura. |
 | `/participacion` | Tarjeta de participación (versión informativa, sin confirmación). |
 | `/asesoras` | Chat "Gabriela y Valentina, asesoras de outfits" (Workers AI, respuesta en streaming). `?i=código` lo personaliza y lo enlaza al invitado. |
