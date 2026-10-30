@@ -222,6 +222,40 @@ const iconHtml = (size) => `<!doctype html><html><head><meta charset="utf-8"><li
 font-family:'Great Vibes',cursive;color:#C9A961;font-size:${size * 0.3}px;line-height:1;white-space:nowrap;padding-top:${size * 0.04}px;box-shadow:inset 0 0 0 ${Math.max(2, size * 0.02)}px rgba(201,169,97,.55)}</style>
 </head><body><div class="c">N&amp;A</div></body></html>`;
 
+// Regalo de CooWeb: póster del reel en un marco vertical + titular.
+const giftHtml = () => `<!doctype html><html><head><meta charset="utf-8"><link href="${FONTS}" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{width:1200px;height:630px;overflow:hidden;font-family:'Cormorant Garamond',serif;color:#FBF9F2;
+    background:radial-gradient(circle at 78% 20%,#5E6E3B 0%,#4B5A2F 38%,#2F3A1C 100%)}
+  .glow{position:absolute;left:60px;top:40px;width:420px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(201,169,97,.35),transparent 65%);filter:blur(10px)}
+  .back{position:absolute;left:236px;top:58px;width:292px;height:518px;border-radius:30px;background:rgba(251,249,242,.1);border:1px solid rgba(201,169,97,.35);transform:rotate(7deg)}
+  .phone{position:absolute;left:150px;top:30px;width:322px;height:572px;border-radius:36px;padding:9px;background:#1E2412;
+    box-shadow:0 40px 80px rgba(0,0,0,.45),0 0 0 2px rgba(201,169,97,.5);transform:rotate(-4deg)}
+  .phone img{width:100%;height:100%;object-fit:cover;border-radius:28px;display:block}
+  .play{position:absolute;left:50%;top:76%;width:92px;height:92px;margin:-46px 0 0 -46px;border-radius:50%;background:rgba(251,249,242,.92);
+    box-shadow:0 12px 30px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center}
+  .play:after{content:"";margin-left:8px;border-left:30px solid #4B5A2F;border-top:19px solid transparent;border-bottom:19px solid transparent}
+  .right{position:absolute;left:560px;right:60px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;gap:16px}
+  .eyebrow{font-family:'Playfair Display',serif;font-size:16px;letter-spacing:6px;text-transform:uppercase;color:#C9A961}
+  h1{font-family:'Great Vibes',cursive;font-weight:400;font-size:92px;line-height:1;color:#FBF9F2}
+  h1 small{display:block;font-family:'Playfair Display',serif;font-style:italic;font-size:30px;color:rgba(251,249,242,.75);margin-bottom:6px}
+  p{font-size:28px;line-height:1.25;color:rgba(251,249,242,.88);max-width:540px}
+  .row{display:flex;align-items:center;gap:16px;margin-top:8px}
+  .pill{display:inline-flex;align-items:center;gap:10px;background:#C9A961;color:#2F3A1C;border-radius:999px;padding:11px 22px;
+    font-family:'Playfair Display',serif;font-size:16px;font-weight:600;letter-spacing:2px;text-transform:uppercase}
+  .date{font-family:'Playfair Display',serif;font-size:15px;letter-spacing:4px;color:rgba(251,249,242,.7)}
+</style></head><body>
+  <div class="glow"></div><div class="back"></div>
+  <div class="phone"><img src="${b64("public/og/de-cooweb-poster.jpg")}"><div class="play"></div></div>
+  <div class="right">
+    <div class="eyebrow">Un regalo de CooWeb 💛</div>
+    <h1><small>Para</small>Norida &amp; Agustín</h1>
+    <p>Su invitación digital, contada en un video: sobre animado, confirmación, asesoras con IA, back office y mesas.</p>
+    <div class="row"><span class="pill">▶ Ver el video</span><span class="date">27 · 12 · 2026</span></div>
+  </div>
+</body></html>`;
+
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
 
@@ -240,6 +274,7 @@ await shot(ogHtml({ badge: "Participación de matrimonio", lead: "Con la bendici
 
 await shot(advisorsHtml(), "public/og/asesoras.jpg", { type: "jpeg", quality: 86 });
 await shot(backofficeHtml(), "public/og/backoffice.jpg", { type: "jpeg", quality: 88 });
+await shot(giftHtml(), "public/og/de-cooweb.jpg", { type: "jpeg", quality: 86 });
 
 for (const [size, path] of [
   [512, "app/icon.png"],

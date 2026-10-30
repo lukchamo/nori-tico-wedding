@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Reel CooWeb · Norida & Agustín</title>
+<!--
+  Escenario vertical 1080×1920 para el reel de felicitación (adaptado del motor de cooweb-video-innovacion).
+  Contrato con render.cjs: window.__ready, window.__duration y window.__render(t).
+  Todos los tiempos de guion están en segundos de la VOZ; T(v) suma el desfase de la música.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@500;600;700;800&family=Space+Grotesk:wght@600;700&display=block" rel="stylesheet">
+<style>
+  :root { --olive:#4B5A2F; --deep:#2C3619; --cream:#FBF9F2; --paper:#F3EEDD; --gold:#C9A961; --gold2:#E9CF8F; --sage:#8A9A6B; --rose:#D3A8A0; --terra:#BF7E5A; --sky:#9FB4C7; }
+  html, body { margin:0; background:#000; overflow:hidden; }
+  #stage { position:relative; width:1080px; height:1920px; overflow:hidden; background:var(--deep); font-family:'Inter',system-ui,sans-serif; color:#fff; }
+  .scene, .layer { position:absolute; inset:0; }
+  .scene { opacity:0; overflow:hidden; }
+  .bg { position:absolute; inset:-3%; background-size:cover; background-position:center; will-change:transform; }
+  .script { font-family:'Great Vibes',cursive; font-weight:400; }
+  .display { font-family:'Playfair Display',Georgia,serif; }
+  .serif { font-family:'Cormorant Garamond',Georgia,serif; }
+  .center { position:absolute; left:0; right:0; text-align:center; }
+  .kicker { font:700 26px/1 'Inter'; letter-spacing:.24em; text-transform:uppercase; color:var(--gold); display:inline-flex; gap:16px; align-items:center; }
+  .kicker::before, .kicker::after { content:""; width:46px; height:2px; background:currentColor; opacity:.7; }
+  .head { font-family:'Playfair Display',serif; font-weight:600; font-size:68px; line-height:1.08; letter-spacing:-.01em; }
+  .head em { font-style:italic; color:var(--gold); font-weight:500; }
+  .swap { position:absolute; left:60px; right:60px; text-align:center; opacity:0; }
+  .w { display:inline-block; will-change:transform,opacity; }
+  /* Dispositivos */
+  .phone { position:absolute; border-radius:64px; padding:16px; background:linear-gradient(145deg,#38423a,#0e1310); box-shadow:0 50px 120px rgba(0,0,0,.55), 0 0 0 2px rgba(255,255,255,.08) inset; }
+  .phone .screen { position:relative; border-radius:50px; overflow:hidden; background:#000; }
+  .phone video { display:block; width:100%; aspect-ratio:390/844; object-fit:cover; background:#fff; }
+  .phone .notch { position:absolute; top:14px; left:50%; width:30%; height:34px; transform:translateX(-50%); background:#000; border-radius:20px; z-index:3; }
+  .browser { position:absolute; border-radius:26px; overflow:hidden; background:#fff; box-shadow:0 50px 120px rgba(0,0,0,.55); }
+  .browser .bar { height:50px; display:flex; align-items:center; gap:10px; padding:0 20px; background:#f2f3ef; }
+  .browser .bar i { width:13px; height:13px; border-radius:50%; background:#ff5f57; display:block; }
+  .browser .bar i:nth-child(2) { background:#febc2e; } .browser .bar i:nth-child(3) { background:#28c840; }
+  .browser .bar .url { margin-left:16px; flex:1; height:32px; border-radius:9px; background:#fff; color:#3c4a45; font-size:17px; display:flex; align-items:center; padding:0 14px; font-weight:600; box-shadow:inset 0 0 0 1px rgba(0,0,0,.07); }
+  .browser .view { position:relative; overflow:hidden; }
+  .browser video { display:block; width:100%; aspect-ratio:16/10; object-fit:cover; transform-origin:0 0; will-change:transform; }
+  /* Piezas */
+  .chip { position:absolute; display:inline-flex; align-items:center; gap:14px; padding:20px 30px; border-radius:999px; font:700 34px/1 'Inter'; color:var(--deep); background:rgba(251,249,242,.96); box-shadow:0 18px 40px rgba(0,0,0,.28); opacity:0; white-space:nowrap; z-index:6; }
+  .chip.dark { background:rgba(44,54,25,.94); color:var(--cream); border:2px solid rgba(201,169,97,.6); }
+  .chip.gold { background:linear-gradient(135deg,#E9CF8F,#C9A961); color:#2C3619; }
+  .chip .ico { font-size:38px; }
+  .tag { position:absolute; font:700 20px/1 'Inter'; letter-spacing:.12em; text-transform:uppercase; padding:10px 16px; border-radius:10px; background:rgba(0,0,0,.55); color:#fff; z-index:7; }
+  .sprig { position:absolute; width:520px; opacity:.9; }
+  .glow { position:absolute; border-radius:50%; filter:blur(60px); opacity:.35; }
+  /* WhatsApp */
+  .wa { position:absolute; width:880px; left:100px; top:330px; border-radius:34px; overflow:hidden; background:#ECE5DD; box-shadow:0 40px 110px rgba(0,0,0,.5); opacity:0; z-index:5; transform-origin:0 0; }
+  .wa-top { display:flex; align-items:center; gap:18px; padding:22px 28px; background:#075E54; color:#fff; }
+  .wa-av { width:66px; height:66px; border-radius:50%; background:var(--olive); color:var(--gold); display:flex; align-items:center; justify-content:center; font:400 34px 'Great Vibes'; border:2px solid var(--gold); }
+  .wa-top b { font:700 30px/1.1 'Inter'; display:block; } .wa-top small { font:500 21px 'Inter'; opacity:.8; }
+  .wa-body { padding:26px; background:#ECE5DD radial-gradient(circle at 20% 20%,rgba(255,255,255,.5),transparent 60%); }
+  .wa-msg { width:700px; margin-left:auto; background:#DCF8C6; border-radius:22px 6px 22px 22px; padding:12px; box-shadow:0 2px 3px rgba(0,0,0,.12); color:#111; }
+  .wa-prev { border-radius:14px; overflow:hidden; background:#cfe9bb; }
+  .wa-prev img { display:block; width:100%; height:340px; object-fit:cover; }
+  .wa-prev div { padding:14px 16px; } .wa-prev b { font:700 25px/1.25 'Inter'; display:block; } .wa-prev span { font:500 20px 'Inter'; color:#4a5a4a; }
+  .wa-txt { font:500 25px/1.38 'Inter'; padding:12px 8px 4px; } .wa-txt a { color:#027eb5; }
+  .wa-time { text-align:right; font:500 18px 'Inter'; color:#5b6b5b; padding:0 6px 4px; }
+  /* Polaroids del lookbook */
+  .pol { position:absolute; width:230px; padding:12px 12px 16px; background:#fff; border-radius:12px; box-shadow:0 24px 50px rgba(0,0,0,.35); opacity:0; }
+  .pol img { width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:6px; display:block; }
+  .avatars { display:flex; justify-content:center; }
+  .av { width:118px; height:118px; border-radius:50%; display:flex; align-items:center; justify-content:center; font:400 66px 'Great Vibes'; color:var(--olive); border:4px solid var(--deep); box-shadow:0 0 0 3px var(--gold); }
+  .av + .av { margin-left:-22px; }
+  /* Barra de capítulos y subtítulos */
+  #progress { position:absolute; left:40px; right:40px; top:34px; display:flex; gap:8px; z-index:40; }
+  #progress div { flex:1; height:7px; border-radius:7px; background:rgba(255,255,255,.28); overflow:hidden; }
+  #progress i { display:block; height:100%; width:0; background:#fff; }
+  #brand { position:absolute; left:40px; top:62px; z-index:40; display:flex; align-items:center; gap:12px; font:700 24px 'Space Grotesk'; color:#fff; padding:8px 18px 8px 8px; border-radius:999px; background:rgba(20,24,12,.55); backdrop-filter:blur(6px); }
+  #brand span { width:36px; height:36px; border-radius:10px; background:var(--olive); border:2px solid var(--gold); display:flex; align-items:center; justify-content:center; font:400 20px 'Great Vibes'; color:var(--gold); }
+  #subs { position:absolute; left:50px; right:50px; top:1585px; height:230px; z-index:45; display:flex; align-items:flex-start; justify-content:center; }
+  .sub { position:absolute; left:0; right:0; text-align:center; opacity:0; }
+  .sub p { display:inline; margin:0; font:800 48px/1.32 'Inter'; color:#fff; padding:6px 18px; border-radius:16px; -webkit-box-decoration-break:clone; box-decoration-break:clone; background:rgba(15,18,10,.62); }
+  .sub .sw { opacity:.45; transition:none; }
+  .sub .sw.on { opacity:1; }
+  .sub .sw.hot { color:var(--gold2); }
+  .grain { position:absolute; inset:0; pointer-events:none; opacity:.07; mix-blend-mode:overlay; z-index:60; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .conf { position:absolute; top:-60px; width:16px; height:26px; border-radius:3px; z-index:30; opacity:0; }
+  .petal { position:absolute; top:-60px; width:30px; height:44px; z-index:30; opacity:0; }
+  .ripple { position:absolute; width:110px; height:110px; margin:-55px 0 0 -55px; border-radius:50%; border:6px solid var(--gold); background:rgba(201,169,97,.25); z-index:9; opacity:0; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="segs.js"></script>
+<script>
+(async () => {
+  const OFF = 1.5, VOICE_END = 67.7, DUR = 72.0;
+  const T = v => v + OFF;
+  const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+  const subs = await (await fetch('subs.json')).json();
+  // Clips (en tiempos de VOZ): [t0, t1, c0, velocidad] → en t muestra el segundo c0 + (t - t0)·v del clip.
+  const SEGS = window.SEGS || {};
+
+  const sprig = (dark) => {
+    const L = 'M0,-9 C5,-7 6,-2 4,3 C2,7 -2,7 -4,3 C-6,-2 -5,-7 0,-9 Z';
+    const pal = dark ? ['#FBF9F2', '#C9A961', '#E5D5B1'] : ['#4B5A2F', '#6E7C4D', '#ADB497'];
+    const tf = ['translate(8,9) rotate(-30) scale(0.85)', 'translate(17,5) rotate(-5)', 'translate(28,11) rotate(20) scale(0.8)', 'translate(40,7) rotate(-15) scale(0.65)', 'translate(51,14) rotate(35) scale(0.55)', 'translate(63,18) rotate(10) scale(0.45)'];
+    const half = `<path d="M2,4 C28,13 52,6 76,13" fill="none" stroke="${pal[1]}" stroke-width="0.8" opacity=".5"/>` + tf.map((t, i) => `<path d="${L}" fill="${pal[i % 3]}" opacity="${.85 - i * .06}" transform="${t}"/>`).join('') +
+      `<g transform="translate(21,16) scale(0.5)">${[0, 72, 144, 216, 288].map(r => `<g transform="rotate(${r})"><ellipse cx="0" cy="-4" rx="2.6" ry="3.6" fill="#FBF9F2"/></g>`).join('')}<circle r="1.8" fill="#C9A961"/></g>`;
+    return `<svg viewBox="0 0 480 50"><g>${half}</g><g transform="translate(480,0) scale(-1,1)">${half}</g></svg>`;
+  };
+  const words = (txt, cls = '') => txt.split(' ').map(w => `<span class="w ${cls}">${w}</span>`).join(' ');
+  const phone = (id, clip, x, y, w) => `<div class="phone" id="${id}" style="left:${x}px;top:${y}px;width:${w}px"><div class="screen"><div class="notch"></div><video data-src="${clip}" muted playsinline></video></div></div>`;
+
+  let html = '';
+  // ---------------- 1 · Felicitación
+  html += `<section class="scene" id="s1">
+    <div class="bg" id="s1-photo" style="background-image:url('img/foto-sobre.jpg');background-position:50% 30%"></div>
+    <div class="layer" style="background:linear-gradient(180deg,rgba(20,24,12,.35) 0%,rgba(20,24,12,0) 30%,rgba(20,24,12,.25) 55%,rgba(28,34,16,.9) 100%)"></div>
+    <div class="layer" id="s1-env" style="perspective:1600px">
+      <div class="layer" id="s1-body" style="background:url('img/sobre-textura.jpg') center/cover;clip-path:polygon(0 0,0 100%,100% 100%,100% 0,50% 52%)"></div>
+      <div class="layer" id="s1-flap" style="background:url('img/sobre-textura.jpg') center/cover;clip-path:polygon(0 0,100% 0,50% 52%);transform-origin:50% 0;backface-visibility:hidden"></div>
+    </div>
+    <div class="center" id="s1-names" style="top:880px"><div class="script" style="font-size:150px;line-height:1;color:#fff;text-shadow:0 8px 30px rgba(0,0,0,.45)">${words('Norida &amp; Agustín')}</div></div>
+    <div class="center" id="s1-felic" style="top:1075px;opacity:0"><div class="display" style="font-size:104px;font-style:italic;font-weight:500;color:var(--gold2);text-shadow:0 6px 24px rgba(0,0,0,.5)">¡Felicitaciones!</div></div>
+    <div class="center" id="s1-date" style="top:1250px;opacity:0"><span class="kicker" style="color:#fff;font-size:30px">27 · 12 · 2026</span></div>
+    <div class="center" id="s1-gift" style="top:1335px;opacity:0"><span style="font:600 30px 'Inter';color:rgba(255,255,255,.9)">Un regalo de <b style="font-family:'Space Grotesk'">CooWeb</b> 💛</span></div>
+  </section>`;
+
+  // ---------------- 2 · La invitación
+  html += `<section class="scene" id="s2">
+    <div class="layer" style="background:radial-gradient(circle at 50% 35%,#FBF9F2 0%,#F1EBD8 60%,#E6DEC5 100%)"></div>
+    <div class="glow" style="width:700px;height:700px;left:-200px;top:300px;background:#ADB497"></div>
+    <div class="glow" style="width:600px;height:600px;right:-200px;top:1100px;background:#E9CF8F"></div>
+    <div class="sprig" style="left:280px;top:120px">${sprig(false)}</div>
+    <div class="center" style="top:185px"><span class="kicker" style="color:var(--olive)">01 · La invitación</span></div>
+    <div class="swap head" id="s2-h1" style="top:240px;color:var(--deep)">Un sobre que se abre <em>al tocarlo</em></div>
+    <div class="swap head" id="s2-h2" style="top:240px;color:var(--deep)">Su historia, <em>de 2016 a hoy</em></div>
+    <div class="swap head" id="s2-h3" style="top:240px;color:var(--deep)">Todo, en <em>un solo enlace</em></div>
+    ${phone('s2-ph', 'inv', 285, 400, 510)}
+    <div class="chip dark" id="s2-c1" style="left:40px;top:860px"><span class="ico">⏳</span>Cuenta regresiva</div>
+    <div class="chip dark" id="s2-c2" style="right:40px;top:1040px"><span class="ico">🗓️</span>Itinerario</div>
+    <div class="chip gold" id="s2-c3" style="left:60px;top:1230px"><span class="ico">💌</span>Lluvia de sobres</div>
+  </section>`;
+
+  // ---------------- 3 · Confirmación
+  html += `<section class="scene" id="s3">
+    <div class="layer" style="background:radial-gradient(circle at 30% 20%,#5E6F3A 0%,#3E4C25 55%,#2C3619 100%)"></div>
+    <div class="glow" style="width:520px;height:520px;right:-120px;top:240px;background:#C9A961;opacity:.25"></div>
+    <div class="center" style="top:185px"><span class="kicker">02 · Confirmación</span></div>
+    <div class="swap head" id="s3-h1" style="top:240px">Su enlace personal <em>por WhatsApp</em></div>
+    <div class="swap head" id="s3-h2" style="top:240px">Confirman <em>en un toque</em> ✨</div>
+    <div class="wa" id="s3-wa">
+      <div class="wa-top"><div class="wa-av">N&amp;A</div><div><b>Norida &amp; Agustín</b><small>en línea</small></div></div>
+      <div class="wa-body"><div class="wa-msg">
+        <div class="wa-prev"><img src="img/invitacion.jpg" alt=""><div><b>Laura Gómez, nos casamos — Norida &amp; Agustín</b><span>noridayagustin.com</span></div></div>
+        <div class="wa-txt">Hola Laura 💛 Con mucha alegría te invitamos a nuestra boda. Abre tu invitación y toca el sobre ✉️<br><a>noridayagustin.com/i/laura</a><br><b>Cupos asignados: 2</b></div>
+        <div class="wa-time">10:24 a. m. ✓✓</div>
+      </div></div>
+    </div>
+    ${phone('s3-ph', 'rsvp', 440, 400, 510)}
+    <div class="chip" id="s3-c1" style="left:40px;top:1080px"><span class="ico">👤</span>Su nombre</div>
+    <div class="chip" id="s3-c2" style="left:40px;top:1210px"><span class="ico">🪑</span>Sus cupos</div>
+    <div class="chip gold" id="s3-c3" style="left:40px;top:1340px"><span class="ico">🎉</span>¡Confirmado!</div>
+  </section>`;
+
+  // ---------------- 4 · Asesoras con IA
+  const lb = ['m-midi-salvia', 'h-guayabera-salvia', 'm-boho-azul', 'h-traje-lino-arena', 'm-satin-terracota', 'zm-cuna-yute', 'zh-mocasin-ante', 'm-tropical-hojas'];
+  const polPos = [[60, 560, -12], [790, 520, 10], [40, 1060, 8], [800, 1080, -9], [330, 360, -4], [520, 1260, 6], [180, 1330, -7], [700, 300, 12]];
+  html += `<section class="scene" id="s4">
+    <div class="layer" style="background:radial-gradient(circle at 50% 30%,#56663A 0%,#3B4824 55%,#28311A 100%)"></div>
+    ${lb.map((id, i) => `<div class="pol" id="s4-p${i}" style="left:${polPos[i][0]}px;top:${polPos[i][1]}px;transform:rotate(${polPos[i][2]}deg)"><img src="img/lb-${id}.jpg" alt=""></div>`).join('')}
+    <div class="center" id="s4-q" style="top:760px;opacity:0"><div class="display" style="font-size:120px;font-weight:600;line-height:1.02;text-shadow:0 10px 40px rgba(0,0,0,.45)">¿Qué me<br><em style="color:var(--gold2);font-style:italic">pongo?</em> 🤔</div></div>
+    <div class="center" id="s4-top" style="top:150px;opacity:0">
+      <div class="avatars"><div class="av" style="background:#D3A8A0">G</div><div class="av" style="background:#9FB4C7">V</div></div>
+      <div class="script" style="font-size:96px;line-height:1.05;margin-top:6px">Gabi y Vale</div>
+      <div class="kicker" style="margin-top:6px">Asesoras de outfits · IA</div>
+    </div>
+    ${phone('s4-ph', 'ases', 295, 500, 490)}
+    <div class="chip gold" id="s4-c1" style="left:30px;top:1060px"><span class="ico">👗</span>Lookbook de la boda</div>
+    <div class="chip" id="s4-c2" style="right:30px;top:1230px"><span class="ico">📸</span>Analizan tu foto</div>
+  </section>`;
+
+  // ---------------- 5 · Backoffice
+  html += `<section class="scene" id="s5">
+    <div class="layer" style="background:radial-gradient(circle at 50% 30%,#FBF9F2 0%,#EEE8D4 60%,#DED6BC 100%)"></div>
+    <div class="glow" style="width:700px;height:700px;right:-260px;top:240px;background:#8A9A6B;opacity:.3"></div>
+    <div class="center" style="top:185px"><span class="kicker" style="color:var(--olive)">03 · Para ustedes</span></div>
+    <div class="swap head" id="s5-h1" style="top:240px;color:var(--deep)">Su back office <em>privado</em> 🔒</div>
+    ${phone('s5-ph1', 'admin-dash', 285, 400, 510)}
+    ${phone('s5-ph2', 'admin-guest', 285, 400, 510)}
+    <div class="tag" id="s5-tag" style="left:400px;top:1490px;background:rgba(44,54,25,.85)">Datos de ejemplo</div>
+    <div class="chip dark" id="s5-c1" style="left:30px;top:720px"><span class="ico">👀</span>Quién abrió</div>
+    <div class="chip dark" id="s5-c2" style="right:30px;top:880px"><span class="ico">✅</span>Quién confirmó</div>
+    <div class="chip" id="s5-c3" style="left:30px;top:1120px;background:#25D366;color:#fff"><span class="ico">📲</span>Envío por WhatsApp</div>
+    <div class="chip gold" id="s5-c4" style="right:30px;top:1300px"><span class="ico">💬</span>Comentarios</div>
+  </section>`;
+
+  // ---------------- 6 · Mesas
+  html += `<section class="scene" id="s6">
+    <div class="layer" style="background:#2C3619"></div>
+    <svg class="layer" style="opacity:.12" width="1080" height="1920"><defs><pattern id="g" width="60" height="60" patternUnits="userSpaceOnUse"><path d="M60 0H0V60" fill="none" stroke="#E9CF8F" stroke-width="1.5"/></pattern></defs><rect width="1080" height="1920" fill="url(#g)"/></svg>
+    <div class="center" style="top:185px"><span class="kicker">04 · Mesas</span></div>
+    <div class="swap head" id="s6-h1" style="top:240px">Un plano 2D <em>del salón</em></div>
+    <div class="browser" id="s6-br" style="left:30px;top:520px;width:1020px">
+      <div class="bar"><i></i><i></i><i></i><div class="url">noridayagustin.com/admin/<b>&nbsp;mesas</b></div></div>
+      <div class="view" id="s6-view"><video data-src="mesas" muted playsinline id="s6-vid"></video></div>
+    </div>
+    <div class="chip gold" id="s6-c1" style="left:40px;top:1245px"><span class="ico">➕</span>Sillas con un toque</div>
+    <div class="chip" id="s6-c2" style="right:40px;top:1360px"><span class="ico">🔀</span>Propuestas de ubicación</div>
+    <div class="chip dark" id="s6-c3" style="left:120px;top:1475px"><span class="ico">👨‍👩‍👧</span>Familias juntas</div>
+  </section>`;
+
+  // ---------------- 7 · Cierre CooWeb
+  html += `<section class="scene" id="s7">
+    <div class="bg" id="s7-photo" style="background-image:url('img/galeria-cita-fondo.jpg');background-position:50% 35%"></div>
+    <div class="layer" style="background:linear-gradient(180deg,rgba(18,20,10,.55) 0%,rgba(18,20,10,.35) 40%,rgba(28,34,16,.92) 100%)"></div>
+    <div class="center" id="s7-a" style="top:330px;padding:0 70px"><div class="serif" style="font-size:72px;font-style:italic;font-weight:600;line-height:1.15;color:#fff;text-shadow:0 4px 20px rgba(0,0,0,.5)">${words('Todo, para que ustedes solo se ocupen de disfrutar.')}</div></div>
+    <div class="center" id="s7-b" style="top:700px;opacity:0">
+      <div style="font:600 34px 'Inter';letter-spacing:.2em;text-transform:uppercase;color:var(--gold2)">De parte de</div>
+      <div style="font:700 150px/1 'Space Grotesk';letter-spacing:-.03em;margin-top:16px;color:#fff;text-shadow:0 10px 40px rgba(0,0,0,.4)">CooWeb</div>
+      <div class="serif" id="s7-b2" style="font-size:60px;font-style:italic;margin-top:14px;opacity:0">con mucho cariño 💛</div>
+    </div>
+    <div class="center" id="s7-c" style="top:1110px;opacity:0"><div class="script" style="font-size:116px;line-height:1;color:var(--gold2);text-shadow:0 8px 30px rgba(0,0,0,.5)">¡Muchas felicitaciones!</div></div>
+    <div class="center" id="s7-d" style="top:1330px;opacity:0"><span class="kicker" style="color:#fff;font-size:30px">27 · 12 · 2026</span><div style="font:600 32px 'Inter';margin-top:18px;color:rgba(255,255,255,.85)">noridayagustin.com</div></div>
+    <div class="layer" id="s7-end" style="background:radial-gradient(circle at 50% 40%,#56663A,#2C3619 70%);opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px">
+      <div class="script" style="font-size:220px;line-height:1;color:var(--gold)">N&amp;A</div>
+      <div class="serif" style="font-size:54px;font-style:italic">Que sea el comienzo de lo mejor</div>
+      <div style="margin-top:60px;font:600 30px 'Inter';color:rgba(255,255,255,.8)">Con cariño, <b style="font:700 40px 'Space Grotesk';color:#fff">CooWeb</b> 💛</div>
+    </div>
+  </section>`;
+
+  html += `<div id="progress">${'<div><i></i></div>'.repeat(7)}</div>`;
+  html += `<div id="brand"><span>N&amp;A</span>Invitación digital · CooWeb</div>`;
+  html += `<div id="subs">${subs.map((s, i) => `<div class="sub" id="sub${i}"><p>${s.words.map((w, j) => `<span class="sw" id="sw${i}_${j}">${w.w}</span>`).join(' ')}</p></div>`).join('')}</div>`;
+  html += `<div class="ripple" id="rip1"></div><div class="grain"></div>`;
+  // Confeti dorado determinista
+  let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const confColors = ['#E9CF8F', '#C9A961', '#FBF9F2', '#D3A8A0', '#8A9A6B', '#9FB4C7'];
+  const conf = [...Array(70)].map((_, i) => ({ x: rnd() * 1080, d: 2.8 + rnd() * 2.2, delay: rnd() * 1.6, r: rnd() * 720 - 360, c: confColors[i % confColors.length], sx: (rnd() - .5) * 240 }));
+  html += conf.map((c, i) => `<div class="conf" id="cf${i}" style="left:${c.x}px;background:${c.c}"></div>`).join('');
+  const LEAF = '<svg viewBox="-6 -10 12 18" width="30" height="44"><path d="M0,-9 C5,-7 6,-2 4,3 C2,7 -2,7 -4,3 C-6,-2 -5,-7 0,-9 Z" fill="FILL"/></svg>';
+  const petals = [...Array(26)].map((_, i) => ({ x: rnd() * 1080, d: 4 + rnd() * 2.5, delay: rnd() * 2.2, r: rnd() * 360, c: ['#8A9A6B', '#ADB497', '#C9A961', '#6E7C4D'][i % 4], sx: (rnd() - .5) * 300 }));
+  html += petals.map((p, i) => `<div class="petal" id="pt${i}" style="left:${p.x}px">${LEAF.replace('FILL', p.c)}</div>`).join('');
+  $('#stage').innerHTML = html;
+
+  // ---------------- Timeline
+  const tl = gsap.timeline({ paused: true });
+  const vids = {};
+  $$('video[data-src]').forEach((v, i) => { v.id = v.id || 'v' + i; v.muted = true; v.preload = 'auto'; v.playsInline = true; v.src = 'clips/' + v.dataset.src + '.mp4'; vids[v.id] = { el: v, segs: [], clip: v.dataset.src }; });
+  for (const v of Object.values(vids)) (SEGS[v.clip] || []).forEach(([a, b, c0, r]) => v.segs.push([T(a), T(b), c0, r ?? 1]));
+  const range = {};
+  const scene = (id, a, b, fi = .5, fo = .5) => { range[id] = [a - fi, b + fo]; tl.fromTo('#' + id, { opacity: 0 }, { opacity: 1, duration: fi, ease: 'none' }, Math.max(0, a - fi)); if (b < DUR) tl.to('#' + id, { opacity: 0, duration: fo, ease: 'none' }, b); };
+  const pop = (sel, t, from = {}) => tl.fromTo(sel, { opacity: 0, y: 40, scale: .85, ...from }, { opacity: 1, y: 0, scale: 1, duration: .55, ease: 'back.out(1.8)' }, t);
+  const out = (sel, t, d = .35) => tl.to(sel, { opacity: 0, y: -20, duration: d, ease: 'power1.in' }, t);
+  const swapIn = (sel, t) => tl.fromTo(sel, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .5, ease: 'power3.out' }, t);
+  const phoneIn = (sel, t, from = { y: 900, rotate: 6 }) => tl.fromTo(sel, { opacity: 0, ...from }, { opacity: 1, y: 0, x: 0, rotate: 0, duration: .9, ease: 'power3.out' }, t);
+  const ripple = (x, y, t) => { tl.set('#rip1', { left: x, top: y }, t); tl.fromTo('#rip1', { opacity: 1, scale: .3 }, { opacity: 0, scale: 1.6, duration: .7, ease: 'power2.out' }, t); };
+
+  // Escenas (tiempos de voz)
+  const S = [[-OFF, 7.5], [7.5, 17.85], [17.85, 26.1], [26.1, 39.2], [39.2, 47.95], [47.95, 55.8], [55.8, DUR - OFF]];
+  ['s1', 's2', 's3', 's4', 's5', 's6', 's7'].forEach((id, i) => scene(id, T(S[i][0]) + (i ? 0 : .5), T(S[i][1]), i ? .45 : .01, .45));
+  // Barra de capítulos
+  S.forEach(([a, b], i) => { tl.set(`#progress div:nth-child(${i + 1}) i`, { width: '0%' }, 0); tl.fromTo(`#progress div:nth-child(${i + 1}) i`, { width: '0%' }, { width: '100%', duration: T(b) - Math.max(0, T(a)), ease: 'none' }, Math.max(0, T(a))); });
+  tl.to('#progress, #brand', { opacity: 0, duration: .6 }, T(66.5));
+
+  // 1 · Felicitación
+  tl.fromTo('#s1-photo', { scale: 1.18 }, { scale: 1.0, duration: 9.5, ease: 'none' }, 0);
+  tl.fromTo('#s1-flap', { rotateX: 0 }, { rotateX: 165, duration: 1.1, ease: 'power2.inOut' }, .35);
+  tl.to('#s1-flap', { opacity: 0, duration: .4 }, 1.0);
+  tl.to('#s1-body', { yPercent: 100, duration: 1.1, ease: 'power3.in' }, 1.0);
+  tl.fromTo('#s1-names .w', { opacity: 0, y: 70, rotate: 4 }, { opacity: 1, y: 0, rotate: 0, duration: .8, ease: 'power3.out', stagger: .22 }, T(0.0));
+  pop('#s1-felic', T(2.3), { scale: .6 });
+  tl.fromTo('#s1-date', { opacity: 0, letterSpacing: '.6em' }, { opacity: 1, letterSpacing: '.24em', duration: .8 }, T(3.8));
+  tl.fromTo('#s1-gift', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .6 }, T(4.8));
+
+  // 2 · Invitación
+  swapIn('#s2-h1', T(7.75)); out('#s2-h1', T(10.6));
+  swapIn('#s2-h2', T(10.8)); out('#s2-h2', T(14.1));
+  swapIn('#s2-h3', T(14.3));
+  phoneIn('#s2-ph', T(7.5));
+  ripple(540, 400 + 16 + 478 * 2.164 * .52, T(9.65));
+  pop('#s2-c1', T(14.3)); pop('#s2-c2', T(15.6)); pop('#s2-c3', T(16.5));
+
+  // 3 · Confirmación
+  swapIn('#s3-h1', T(18.2)); out('#s3-h1', T(22.9)); swapIn('#s3-h2', T(23.1));
+  tl.fromTo('#s3-wa', { opacity: 0, y: 160, scale: .92 }, { opacity: 1, y: 0, scale: 1, duration: .8, ease: 'power3.out' }, T(18.6));
+  tl.to('#s3-wa', { scale: .38, x: -60, y: 110, duration: .8, ease: 'power3.inOut' }, T(21.0));
+  phoneIn('#s3-ph', T(21.15), { x: 400, rotate: 8 });
+  pop('#s3-c1', T(21.6)); pop('#s3-c2', T(22.4)); pop('#s3-c3', T(24.4), { scale: .5 });
+
+  // 4 · Asesoras
+  lb.forEach((_, i) => tl.fromTo(`#s4-p${i}`, { opacity: 0, scale: .5, y: 80 }, { opacity: 1, scale: 1, y: 0, duration: .6, ease: 'back.out(1.6)' }, T(26.3) + i * .12));
+  tl.to(lb.map((_, i) => `#s4-p${i}`), { y: '-=40', duration: 3, ease: 'sine.inOut' }, T(27.0));
+  tl.fromTo('#s4-q', { opacity: 0, scale: .7 }, { opacity: 1, scale: 1, duration: .6, ease: 'back.out(2)' }, T(27.8));
+  tl.to('#s4-q', { opacity: 0, scale: 1.1, duration: .4 }, T(29.1));
+  lb.forEach((_, i) => tl.to(`#s4-p${i}`, { opacity: 0, x: (polPos[i][0] < 500 ? -500 : 500), duration: .6, ease: 'power2.in' }, T(29.1) + i * .03));
+  tl.fromTo('#s4-top', { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: .6 }, T(29.3));
+  tl.fromTo('#s4-top .av', { scale: 0 }, { scale: 1, duration: .5, ease: 'back.out(2.5)', stagger: .15 }, T(29.9));
+  phoneIn('#s4-ph', T(29.6));
+  pop('#s4-c1', T(34.6)); pop('#s4-c2', T(37.2));
+
+  // 5 · Backoffice
+  swapIn('#s5-h1', T(39.5));
+  phoneIn('#s5-ph1', T(39.4));
+  tl.set('#s5-ph2', { opacity: 0 }, 0);
+  tl.fromTo('#s5-ph2', { opacity: 0, x: 120 }, { opacity: 1, x: 0, duration: .5, ease: 'power2.out' }, T(44.45));
+  tl.to('#s5-ph1', { opacity: 0, x: -120, duration: .5 }, T(44.45));
+  tl.fromTo('#s5-tag', { opacity: 0 }, { opacity: 1, duration: .4 }, T(40.2));
+  pop('#s5-c1', T(41.8)); pop('#s5-c2', T(43.5)); pop('#s5-c3', T(44.7)); pop('#s5-c4', T(46.1));
+
+  // 6 · Mesas (con zoom de cámara sobre el navegador)
+  swapIn('#s6-h1', T(48.2));
+  tl.fromTo('#s6-br', { opacity: 0, y: 300, rotateX: 18 }, { opacity: 1, y: 0, rotateX: 0, duration: .9, ease: 'power3.out' }, T(47.9));
+  const Z = window.ZOOMS || [];
+  Z.forEach(([t, s, x, y, d]) => tl.to('#s6-vid', { scale: s, x, y, duration: d ?? .7, ease: 'power2.inOut' }, T(t)));
+  pop('#s6-c1', T(50.8)); pop('#s6-c2', T(52.7)); pop('#s6-c3', T(55.0));
+
+  // 7 · Cierre
+  tl.fromTo('#s7-photo', { scale: 1.12 }, { scale: 1.0, duration: 13, ease: 'none' }, T(55.6));
+  tl.fromTo('#s7-a .w', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .5, stagger: .14, ease: 'power2.out' }, T(55.9));
+  tl.to('#s7-a', { opacity: 0, y: -40, duration: .5 }, T(59.7));
+  tl.fromTo('#s7-b', { opacity: 0, scale: .8 }, { opacity: 1, scale: 1, duration: .7, ease: 'back.out(1.6)' }, T(60.0));
+  tl.fromTo('#s7-b2', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .6 }, T(61.5));
+  tl.fromTo('#s7-c', { opacity: 0, scale: .6 }, { opacity: 1, scale: 1, duration: .8, ease: 'back.out(1.8)' }, T(62.8));
+  tl.fromTo('#s7-d', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: .6 }, T(64.5));
+  tl.to('#s7-end', { opacity: 1, duration: 1.0 }, T(67.9));
+  tl.to('#subs', { opacity: 0, duration: .4 }, T(68.0));
+
+  // Confeti en la confirmación (3), en el cierre (7) y pétalos en la apertura (1)
+  const rain = (list, prefix, t0, scale = 1) => list.forEach((c, i) => {
+    const t = t0 + c.delay * scale;
+    tl.fromTo(`#${prefix}${i}`, { opacity: 0, y: -80, x: 0, rotate: 0 }, { opacity: 1, duration: .2 }, t);
+    tl.fromTo(`#${prefix}${i}`, { y: -80 }, { y: 2050, x: c.sx, rotate: c.r, duration: c.d, ease: 'none' }, t);
+    tl.to(`#${prefix}${i}`, { opacity: 0, duration: .3 }, t + c.d - .3);
+  });
+  rain(petals, 'pt', 1.2, .9);
+  rain(conf.slice(0, 35), 'cf', T(24.5), .7);
+  rain(conf, 'cf', T(62.8), 1.0);
+
+  // Subtítulos palabra a palabra
+  subs.forEach((s, i) => {
+    tl.fromTo(`#sub${i}`, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .18 }, T(s.start));
+    tl.to(`#sub${i}`, { opacity: 0, duration: .15 }, T(s.end));
+    s.words.forEach((w, j) => {
+      tl.set(`#sw${i}_${j}`, { attr: { class: 'sw on hot' } }, T(w.s));
+      const nx = s.words[j + 1]?.s ?? s.end;
+      tl.set(`#sw${i}_${j}`, { attr: { class: 'sw on' } }, T(Math.min(nx, w.s + .55)));
+    });
+  });
+  tl.set({}, {}, DUR);
+
+  // ---------------- API del renderizador
+  const seekVideo = (v, t) => new Promise(res => {
+    if (Math.abs(v.currentTime - t) < 0.0005 && v.readyState >= 2) return res();
+    let seeked = false, presented = false, fin = false;
+    const end = () => { if (!fin) { fin = true; res(); } };
+    const check = () => { if (seeked && presented) end(); };
+    v.addEventListener('seeked', () => { seeked = true; check(); }, { once: true });
+    const onFrame = (now, md) => { if (Math.abs(md.mediaTime - t) < 0.02) { presented = true; check(); } else if (!fin) v.requestVideoFrameCallback(onFrame); };
+    if (v.requestVideoFrameCallback) v.requestVideoFrameCallback(onFrame); else presented = true;
+    v.currentTime = t; setTimeout(end, 2500);
+  });
+  window.__duration = DUR;
+  window.__ready = Promise.all([document.fonts.ready, ...Object.values(vids).map(({ el }) => new Promise(r => { if (el.readyState >= 2) return r(); el.addEventListener('loadeddata', r, { once: true }); el.addEventListener('error', () => { console.error('No carga el clip', el.src); r(); }, { once: true }); setTimeout(r, 15000); }))]);
+  window.__render = async t => {
+    tl.seek(t, false);
+    const jobs = [];
+    for (const { el, segs } of Object.values(vids)) {
+      if (!segs.length || !el.duration) continue;
+      const sc = el.closest('.scene').id, [s0, s1] = range[sc] || [0, DUR];
+      if (t < s0 - .2 || t > s1 + .2) continue;
+      let s = segs.find(([a, b]) => t >= a && t < b);
+      if (!s) { const before = segs.filter(([a]) => a <= t); s = before.length ? before[before.length - 1] : segs[0]; }
+      const [a, b, c0, rt] = s;
+      const ct = Math.min(el.duration - 0.05, Math.max(0, c0 + (Math.min(Math.max(t, a), b) - a) * rt));
+      jobs.push(seekVideo(el, Math.round(ct * 30) / 30 + 0.001));
+    }
+    await Promise.all(jobs);
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+  };
+})();
+</script>
+</body>
+</html>

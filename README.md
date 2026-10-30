@@ -13,6 +13,8 @@ Producción: **https://noridayagustin.com** (dominio propio del Worker; `www.nor
 | `/participacion` | Tarjeta de participación (versión informativa, sin confirmación). |
 | `/asesoras` | Asistente "Gabriela y Valentina, asesoras de outfits" (Workers AI · Mistral Small 3.1, texto e imagen, en streaming): opciones guiadas para tocar, respuestas con carrusel de looks del lookbook, visor ampliado con prendas y "cómo combinarlo", galería completa con filtros y análisis de la foto del outfit (se optimiza en el navegador y no se guarda). `?i=código` lo personaliza y lo enlaza al invitado. |
 | `/admin` | Backoffice (PIN de 4 dígitos): resumen, embudo, invitados, ficha con comentarios, actividad, chats de la IA, exportar CSV. |
+| `/de-cooweb` | Regalo de CooWeb para los novios: reel vertical de felicitación (72 s) que explica las funciones de la invitación, con descarga para WhatsApp y en alta calidad. Fuentes del video en `video/reel-cooweb/`. |
+| `/media/*` | Archivos pesados servidos desde R2 (`nori-tico-media`, binding `MEDIA`) con soporte de Range; `?descargar` fuerza la descarga. |
 
 Todo el sitio es **no-index**: `<meta name="robots" content="noindex, nofollow">`, cabecera `X-Robots-Tag` (páginas y archivos estáticos vía `public/_headers`) y `robots.txt` que solo deja pasar a los bots de vista previa (WhatsApp, Facebook, Telegram…). Las imágenes Open Graph están en `public/og/` (1200×630).
 

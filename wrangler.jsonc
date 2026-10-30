@@ -25,6 +25,12 @@
   "ai": {
     "binding": "AI"
   },
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "nori-tico-media"
+    }
+  ],
   "workers_dev": true,
   "preview_urls": false,
   "routes": [

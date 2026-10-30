@@ -1,0 +1,86 @@
+.dc-root {
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  padding: 28px 16px 40px;
+  background: radial-gradient(circle at 50% 0%, #5e6f3a 0%, #3e4c25 45%, #2c3619 100%);
+  color: #fbf9f2;
+  font-family: var(--font-serif), Georgia, serif;
+}
+.dc-card {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+}
+.dc-kicker {
+  font: 700 13px/1 ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #e9cf8f;
+}
+.dc-title {
+  margin: 0;
+  font-family: var(--font-script), cursive;
+  font-weight: 400;
+  font-size: 54px;
+  line-height: 1.05;
+}
+.dc-lead {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.45;
+  color: rgba(251, 249, 242, 0.88);
+  max-width: 420px;
+}
+.dc-player {
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 9 / 16;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #000;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(201, 169, 97, 0.4);
+  margin-top: 6px;
+}
+.dc-player video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+.dc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 6px;
+}
+.dc-btn {
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(233, 207, 143, 0.7);
+  color: #e9cf8f;
+  text-decoration: none;
+  font: 600 14px ui-sans-serif, system-ui, sans-serif;
+}
+.dc-btn.primary {
+  background: #25d366;
+  border-color: #25d366;
+  color: #fff;
+}
+.dc-link {
+  color: #fbf9f2;
+  font-size: 17px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.dc-foot {
+  margin: 8px 0 0;
+  font-size: 16px;
+  color: rgba(251, 249, 242, 0.75);
+}

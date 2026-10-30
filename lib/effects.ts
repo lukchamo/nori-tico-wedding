@@ -17,7 +17,8 @@ function load(): Promise<Kit> {
     canvas.setAttribute("aria-hidden", "true");
     Object.assign(canvas.style, { position: "fixed", inset: "0", width: "100%", height: "100%", pointerEvents: "none", zIndex: "300" });
     document.body.appendChild(canvas);
-    const fire = confetti.create(canvas, { resize: true, useWorker: true, disableForReducedMotion: true });
+    // En grabaciones con reloj virtual (__vtAdvance) el confeti va en el hilo principal para seguir ese reloj.
+    const fire = confetti.create(canvas, { resize: true, useWorker: !("__vtAdvance" in window), disableForReducedMotion: true });
     return {
       fire,
       leaf: confetti.shapeFromPath({ path: LEAF }),

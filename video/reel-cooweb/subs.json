@@ -1,0 +1,870 @@
+[
+{
+"start": 0.0,
+"end": 2.05,
+"text": "Norida y Agustín…",
+"words": [
+{
+"w": "Norida",
+"s": 0.0
+},
+{
+"w": "y",
+"s": 0.64
+},
+{
+"w": "Agustín…",
+"s": 0.76
+}
+]
+},
+{
+"start": 2.23,
+"end": 3.55,
+"text": "¡felicitaciones!",
+"words": [
+{
+"w": "¡felicitaciones!",
+"s": 2.28
+}
+]
+},
+{
+"start": 3.75,
+"end": 7.55,
+"text": "Una historia como la suya merecía una invitación a su altura.",
+"words": [
+{
+"w": "Una",
+"s": 3.8
+},
+{
+"w": "historia",
+"s": 4.0
+},
+{
+"w": "como",
+"s": 4.34
+},
+{
+"w": "la",
+"s": 4.58
+},
+{
+"w": "suya",
+"s": 4.72
+},
+{
+"w": "merecía",
+"s": 5.06
+},
+{
+"w": "una",
+"s": 5.56
+},
+{
+"w": "invitación",
+"s": 5.76
+},
+{
+"w": "a",
+"s": 6.38
+},
+{
+"w": "su",
+"s": 6.54
+},
+{
+"w": "altura.",
+"s": 6.6
+}
+]
+},
+{
+"start": 7.75,
+"end": 10.15,
+"text": "Empieza con un sobre que se abre al tocarlo…",
+"words": [
+{
+"w": "Empieza",
+"s": 7.84
+},
+{
+"w": "con",
+"s": 8.52
+},
+{
+"w": "un",
+"s": 8.74
+},
+{
+"w": "sobre",
+"s": 8.88
+},
+{
+"w": "que",
+"s": 9.18
+},
+{
+"w": "se",
+"s": 9.36
+},
+{
+"w": "abre",
+"s": 9.54
+},
+{
+"w": "al",
+"s": 9.74
+},
+{
+"w": "tocarlo…",
+"s": 9.86
+}
+]
+},
+{
+"start": 10.35,
+"end": 14.05,
+"text": "y cuenta su historia, desde 2016 hasta hoy:",
+"words": [
+{
+"w": "y",
+"s": 10.42
+},
+{
+"w": "cuenta",
+"s": 10.84
+},
+{
+"w": "su",
+"s": 11.06
+},
+{
+"w": "historia,",
+"s": 11.28
+},
+{
+"w": "desde",
+"s": 11.72
+},
+{
+"w": "2016",
+"s": 12.14
+},
+{
+"w": "hasta",
+"s": 12.88
+},
+{
+"w": "hoy:",
+"s": 13.6
+}
+]
+},
+{
+"start": 14.229999999999999,
+"end": 18.05,
+"text": "cuenta regresiva, itinerario y lluvia de sobres.",
+"words": [
+{
+"w": "cuenta",
+"s": 14.28
+},
+{
+"w": "regresiva,",
+"s": 14.6
+},
+{
+"w": "itinerario",
+"s": 15.56
+},
+{
+"w": "y",
+"s": 16.14
+},
+{
+"w": "lluvia",
+"s": 16.52
+},
+{
+"w": "de",
+"s": 16.98
+},
+{
+"w": "sobres.",
+"s": 17.1
+}
+]
+},
+{
+"start": 18.21,
+"end": 21.15,
+"text": "Cada invitado recibe por WhatsApp su enlace personal.",
+"words": [
+{
+"w": "Cada",
+"s": 18.26
+},
+{
+"w": "invitado",
+"s": 18.46
+},
+{
+"w": "recibe",
+"s": 18.96
+},
+{
+"w": "por",
+"s": 19.36
+},
+{
+"w": "WhatsApp",
+"s": 19.54
+},
+{
+"w": "su",
+"s": 19.92
+},
+{
+"w": "enlace",
+"s": 20.14
+},
+{
+"w": "personal.",
+"s": 20.44
+}
+]
+},
+{
+"start": 21.349999999999998,
+"end": 22.75,
+"text": "Ve su nombre, sus cupos…",
+"words": [
+{
+"w": "Ve",
+"s": 21.44
+},
+{
+"w": "su",
+"s": 21.52
+},
+{
+"w": "nombre,",
+"s": 21.66
+},
+{
+"w": "sus",
+"s": 22.34
+},
+{
+"w": "cupos…",
+"s": 22.48
+}
+]
+},
+{
+"start": 22.93,
+"end": 26.15,
+"text": "y confirma en un toque, con confeti incluido.",
+"words": [
+{
+"w": "y",
+"s": 22.98
+},
+{
+"w": "confirma",
+"s": 23.4
+},
+{
+"w": "en",
+"s": 23.84
+},
+{
+"w": "un",
+"s": 23.92
+},
+{
+"w": "toque,",
+"s": 24.04
+},
+{
+"w": "con",
+"s": 24.62
+},
+{
+"w": "confeti",
+"s": 24.8
+},
+{
+"w": "incluido.",
+"s": 25.24
+}
+]
+},
+{
+"start": 26.349999999999998,
+"end": 28.95,
+"text": "¿Y la gran pregunta… qué me pongo?",
+"words": [
+{
+"w": "¿Y",
+"s": 26.4
+},
+{
+"w": "la",
+"s": 26.62
+},
+{
+"w": "gran",
+"s": 26.74
+},
+{
+"w": "pregunta…",
+"s": 26.94
+},
+{
+"w": "qué",
+"s": 27.86
+},
+{
+"w": "me",
+"s": 28.24
+},
+{
+"w": "pongo?",
+"s": 28.38
+}
+]
+},
+{
+"start": 29.15,
+"end": 30.85,
+"text": "Para eso están Gabi y Vale,",
+"words": [
+{
+"w": "Para",
+"s": 29.2
+},
+{
+"w": "eso",
+"s": 29.52
+},
+{
+"w": "están",
+"s": 29.72
+},
+{
+"w": "Gabi",
+"s": 30.06
+},
+{
+"w": "y",
+"s": 30.4
+},
+{
+"w": "Vale,",
+"s": 30.56
+}
+]
+},
+{
+"start": 31.029999999999998,
+"end": 33.95,
+"text": "sus asesoras de outfits con inteligencia artificial.",
+"words": [
+{
+"w": "sus",
+"s": 31.08
+},
+{
+"w": "asesoras",
+"s": 31.16
+},
+{
+"w": "de",
+"s": 31.62
+},
+{
+"w": "outfits",
+"s": 31.82
+},
+{
+"w": "con",
+"s": 32.14
+},
+{
+"w": "inteligencia",
+"s": 32.38
+},
+{
+"w": "artificial.",
+"s": 33.02
+}
+]
+},
+{
+"start": 34.13,
+"end": 36.45,
+"text": "Muestran un catálogo de looks en los colores de la boda…",
+"words": [
+{
+"w": "Muestran",
+"s": 34.18
+},
+{
+"w": "un",
+"s": 34.58
+},
+{
+"w": "catálogo",
+"s": 34.72
+},
+{
+"w": "de",
+"s": 35.08
+},
+{
+"w": "looks",
+"s": 35.3
+},
+{
+"w": "en",
+"s": 35.52
+},
+{
+"w": "los",
+"s": 35.7
+},
+{
+"w": "colores",
+"s": 35.8
+},
+{
+"w": "de",
+"s": 36.14
+},
+{
+"w": "la",
+"s": 36.3
+},
+{
+"w": "boda…",
+"s": 36.4
+}
+]
+},
+{
+"start": 36.61,
+"end": 39.35,
+"text": "y hasta analizan la foto de tu outfit.",
+"words": [
+{
+"w": "y",
+"s": 36.66
+},
+{
+"w": "hasta",
+"s": 37.06
+},
+{
+"w": "analizan",
+"s": 37.3
+},
+{
+"w": "la",
+"s": 37.86
+},
+{
+"w": "foto",
+"s": 38.0
+},
+{
+"w": "de",
+"s": 38.26
+},
+{
+"w": "tu",
+"s": 38.44
+},
+{
+"w": "outfit.",
+"s": 38.56
+}
+]
+},
+{
+"start": 39.550000000000004,
+"end": 41.55,
+"text": "Ustedes tienen su back office privado:",
+"words": [
+{
+"w": "Ustedes",
+"s": 39.6
+},
+{
+"w": "tienen",
+"s": 40.02
+},
+{
+"w": "su",
+"s": 40.2
+},
+{
+"w": "back",
+"s": 40.42
+},
+{
+"w": "office",
+"s": 40.68
+},
+{
+"w": "privado:",
+"s": 40.94
+}
+]
+},
+{
+"start": 41.75,
+"end": 44.45,
+"text": "ven quién abrió la invitación, quién confirmó,",
+"words": [
+{
+"w": "ven",
+"s": 41.82
+},
+{
+"w": "quién",
+"s": 41.94
+},
+{
+"w": "abrió",
+"s": 42.2
+},
+{
+"w": "la",
+"s": 42.44
+},
+{
+"w": "invitación,",
+"s": 42.58
+},
+{
+"w": "quién",
+"s": 43.54
+},
+{
+"w": "confirmó,",
+"s": 43.66
+}
+]
+},
+{
+"start": 44.63,
+"end": 48.05,
+"text": "envían por WhatsApp y dejan comentarios a cada invitado.",
+"words": [
+{
+"w": "envían",
+"s": 44.68
+},
+{
+"w": "por",
+"s": 44.98
+},
+{
+"w": "WhatsApp",
+"s": 45.18
+},
+{
+"w": "y",
+"s": 45.54
+},
+{
+"w": "dejan",
+"s": 45.88
+},
+{
+"w": "comentarios",
+"s": 46.1
+},
+{
+"w": "a",
+"s": 46.68
+},
+{
+"w": "cada",
+"s": 46.94
+},
+{
+"w": "invitado.",
+"s": 47.2
+}
+]
+},
+{
+"start": 48.21,
+"end": 50.55,
+"text": "Y organizan las mesas en un plano del salón:",
+"words": [
+{
+"w": "Y",
+"s": 48.26
+},
+{
+"w": "organizan",
+"s": 48.36
+},
+{
+"w": "las",
+"s": 48.82
+},
+{
+"w": "mesas",
+"s": 48.96
+},
+{
+"w": "en",
+"s": 49.28
+},
+{
+"w": "un",
+"s": 49.44
+},
+{
+"w": "plano",
+"s": 49.56
+},
+{
+"w": "del",
+"s": 49.82
+},
+{
+"w": "salón:",
+"s": 50.04
+}
+]
+},
+{
+"start": 50.75,
+"end": 52.05,
+"text": "agregan sillas con un toque…",
+"words": [
+{
+"w": "agregan",
+"s": 50.84
+},
+{
+"w": "sillas",
+"s": 51.2
+},
+{
+"w": "con",
+"s": 51.52
+},
+{
+"w": "un",
+"s": 51.78
+},
+{
+"w": "toque…",
+"s": 51.92
+}
+]
+},
+{
+"start": 52.25,
+"end": 55.65,
+"text": "o piden propuestas de ubicación que mantienen juntas a las familias.",
+"words": [
+{
+"w": "o",
+"s": 52.3
+},
+{
+"w": "piden",
+"s": 52.72
+},
+{
+"w": "propuestas",
+"s": 52.96
+},
+{
+"w": "de",
+"s": 53.42
+},
+{
+"w": "ubicación",
+"s": 53.6
+},
+{
+"w": "que",
+"s": 54.08
+},
+{
+"w": "mantienen",
+"s": 54.28
+},
+{
+"w": "juntas",
+"s": 54.64
+},
+{
+"w": "a",
+"s": 55.16
+},
+{
+"w": "las",
+"s": 55.26
+},
+{
+"w": "familias.",
+"s": 55.38
+}
+]
+},
+{
+"start": 55.830000000000005,
+"end": 59.85,
+"text": "Todo, para que ustedes solo se ocupen de disfrutar.",
+"words": [
+{
+"w": "Todo,",
+"s": 55.88
+},
+{
+"w": "para",
+"s": 56.64
+},
+{
+"w": "que",
+"s": 57.26
+},
+{
+"w": "ustedes",
+"s": 57.42
+},
+{
+"w": "solo",
+"s": 57.76
+},
+{
+"w": "se",
+"s": 58.2
+},
+{
+"w": "ocupen",
+"s": 58.38
+},
+{
+"w": "de",
+"s": 58.8
+},
+{
+"w": "disfrutar.",
+"s": 58.9
+}
+]
+},
+{
+"start": 60.010000000000005,
+"end": 62.65,
+"text": "De parte de CooWeb, con mucho cariño…",
+"words": [
+{
+"w": "De",
+"s": 60.06
+},
+{
+"w": "parte",
+"s": 60.34
+},
+{
+"w": "de",
+"s": 60.56
+},
+{
+"w": "CooWeb,",
+"s": 61.07
+},
+{
+"w": "con",
+"s": 61.58
+},
+{
+"w": "mucho",
+"s": 61.64
+},
+{
+"w": "cariño…",
+"s": 62.02
+}
+]
+},
+{
+"start": 62.85,
+"end": 64.25,
+"text": "¡muchas felicitaciones!",
+"words": [
+{
+"w": "¡muchas",
+"s": 62.9
+},
+{
+"w": "felicitaciones!",
+"s": 63.16
+}
+]
+},
+{
+"start": 64.45,
+"end": 67.9,
+"text": "Que este 27 de diciembre sea el comienzo de lo mejor.",
+"words": [
+{
+"w": "Que",
+"s": 64.54
+},
+{
+"w": "este",
+"s": 64.72
+},
+{
+"w": "27",
+"s": 64.92
+},
+{
+"w": "de",
+"s": 65.46
+},
+{
+"w": "diciembre",
+"s": 65.76
+},
+{
+"w": "sea",
+"s": 66.2
+},
+{
+"w": "el",
+"s": 66.46
+},
+{
+"w": "comienzo",
+"s": 66.58
+},
+{
+"w": "de",
+"s": 67.14
+},
+{
+"w": "lo",
+"s": 67.26
+},
+{
+"w": "mejor.",
+"s": 67.36
+}
+]
+}
+]
