@@ -1,0 +1,1406 @@
+/* Versión 2 · "Dos caminos, una sola historia": la invitación contada con scroll.
+   Paleta y tipografías de la tarjeta original. Solo se animan transform, opacity y stroke-dashoffset. */
+
+:root:has(.hs-root) {
+  scroll-padding-top: 60px;
+}
+
+.hs-root {
+  --olive: #4b5a2f;
+  --olive-ink: #3e4c25;
+  --olive-deep: #2c3619;
+  --sage: #8a9a6b;
+  --gold: #c9a961;
+  --gold-soft: #e5d5b1;
+  --gold-ink: #7a5f22;
+  --cream: #fbf9f2;
+  --paper: #f4efe1;
+  --ink: #3a3f2e;
+  --ink-soft: #4a4e3b;
+  --terra: #bf7e5a;
+  --terra-ink: #9a5634;
+  --bar-h: 60px;
+  --gutter: clamp(16px, 4vw, 56px);
+  --wide: max(var(--gutter), calc((100% - 1180px) / 2));
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-serif), "Cormorant Garamond", Georgia, serif;
+  line-height: 1.5;
+  overflow-x: clip;
+}
+.hs-root *,
+.hs-root *::before,
+.hs-root *::after {
+  box-sizing: border-box;
+}
+.hs-root [hidden] {
+  display: none !important;
+}
+.hs-root img,
+.hs-root svg {
+  display: block;
+}
+.hs-root img {
+  max-width: 100%;
+  height: auto;
+}
+.hs-root p {
+  margin: 0;
+}
+.hs-root :focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--olive-deep);
+  border-radius: 8px;
+}
+.hs-root .sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.hs-skip {
+  position: fixed;
+  left: 12px;
+  top: -70px;
+  z-index: 100;
+  padding: 12px 18px;
+  border-radius: 12px;
+  background: var(--olive);
+  color: var(--cream);
+  font: 700 14px var(--sans);
+  text-decoration: none;
+  transition: top 0.2s;
+}
+.hs-skip:focus {
+  top: 12px;
+}
+
+/* ---------- Tipografía común ---------- */
+.hs-kicker {
+  font: 700 13px/1.35 var(--sans);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--olive);
+  margin: 0 0 14px !important;
+}
+.hs-root h2 {
+  font-family: var(--font-display), "Playfair Display", Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(32px, min(5.2vw, 7.6vh), 64px);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--olive-deep);
+  margin: 0 0 16px;
+  text-wrap: balance;
+}
+.hs-root h2 em.script,
+.hs-hero-statement em.script {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.22em;
+  line-height: 0.9;
+  color: var(--terra-ink);
+}
+/* :where() deja la especificidad en (0,1,0): las clases de cada sección mandan sobre este estilo base. */
+.hs-root :where(p.serif) {
+  font-size: clamp(19px, 1.6vw, 22px);
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.hs-root .script {
+  font-family: var(--font-script), "Great Vibes", cursive;
+}
+.hs-root .display {
+  font-family: var(--font-display), "Playfair Display", Georgia, serif;
+}
+[data-split] .w {
+  display: inline-block;
+}
+[data-split] .wi {
+  display: inline-block;
+}
+
+/* ---------- Botones ---------- */
+.hs-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  border: 0;
+  font: 700 13px/1.1 var(--sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.3s var(--ease-out),
+    background 0.3s,
+    color 0.3s;
+}
+.hs-btn:hover {
+  transform: translateY(-2px);
+}
+.hs-btn:active {
+  transform: scale(0.96);
+}
+.hs-btn.hs-btn-solid {
+  background: var(--olive);
+  color: var(--cream);
+}
+.hs-btn.hs-btn-solid:hover {
+  background: var(--olive-ink);
+}
+.hs-btn.hs-btn-ghost {
+  background: rgba(251, 249, 242, 0.7);
+  color: var(--olive);
+  box-shadow: inset 0 0 0 1.5px var(--olive);
+}
+.hs-btn-sm {
+  padding: 10px 18px;
+  font-size: 12px;
+}
+.hs-round {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid var(--olive);
+  background: var(--cream);
+  color: var(--olive);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.hs-round:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* ---------- Barra superior ---------- */
+.hs-bar {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  height: var(--bar-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 clamp(10px, 3vw, 32px);
+  background: rgba(251, 249, 242, 0.86);
+  -webkit-backdrop-filter: saturate(1.2) blur(10px);
+  backdrop-filter: saturate(1.2) blur(10px);
+  border-bottom: 1px solid rgba(201, 169, 97, 0.35);
+}
+.hs-bar-mono {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--olive);
+  text-decoration: none;
+}
+.hs-bar-mono .script {
+  font-size: 30px;
+  line-height: 1;
+}
+.hs-bar-mono .display {
+  font-size: 15px;
+  color: var(--gold-ink);
+}
+.hs-bar-year {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hs-bar-year small {
+  font: 700 12px var(--sans);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--olive);
+}
+.hs-year {
+  display: inline-block;
+  font-size: 22px;
+  color: var(--terra-ink);
+  font-variant-numeric: tabular-nums;
+  margin-top: 3px;
+}
+.hs-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hs-bar-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--olive);
+  box-shadow: inset 0 0 0 1px rgba(75, 90, 47, 0.3);
+}
+.hs-bar-cta {
+  padding: 10px 18px;
+}
+.hs-motion {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--olive-deep);
+  color: var(--cream);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.hs-motion-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.hs-bar-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 3px;
+}
+.hs-bar-progress i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--olive), var(--gold), var(--terra));
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+}
+
+/* ---------- Dibujo de trazos (pathLength = 1) ---------- */
+.hs-draw,
+.hs-arch-half {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 0;
+}
+@keyframes hs-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes hs-rise {
+  from {
+    transform: translateY(22px);
+  }
+}
+@keyframes hs-loop {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.hs-loop-x {
+  transform-box: fill-box;
+  animation: hs-loop 16s linear infinite;
+}
+.is-off .hs-loop-x,
+.is-off.hs-loop-x {
+  animation-play-state: paused;
+}
+
+/* ---------- Hero ---------- */
+.hs-hero-pin {
+  position: relative;
+}
+.hs-hero {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: calc(var(--bar-h) + 20px) var(--gutter) 26px;
+  overflow: hidden;
+  text-align: center;
+  isolation: isolate;
+  background: #f6e6cf;
+}
+.hs-hero-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+.hs-hero-threads .hs-draw {
+  animation: hs-draw 2.6s cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+.hs-hero-threads .hs-draw + .hs-draw {
+  animation-delay: 0.3s;
+}
+.hs-hero-copy {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: min(1120px, 100%);
+}
+.hs-hero-copy > * {
+  animation: hs-rise 1.1s var(--ease-out) both;
+}
+.hs-hero-copy > :nth-child(2) {
+  animation-delay: 0.05s;
+}
+.hs-hero-copy > :nth-child(3) {
+  animation-delay: 0.1s;
+}
+.hs-hero-copy > :nth-child(4) {
+  animation-delay: 0.15s;
+}
+.hs-hero-copy > :nth-child(5) {
+  animation-delay: 0.2s;
+}
+.hs-hero-copy > :nth-child(6) {
+  animation-delay: 0.25s;
+}
+.hs-names {
+  margin: 4px 0 0;
+  font-size: clamp(56px, min(12.5vw, 15vh), 150px);
+  font-weight: 400;
+  line-height: 1.02;
+  color: var(--olive);
+}
+.hs-amp {
+  color: var(--terra-ink);
+}
+.hs-heart-rule {
+  width: min(240px, 62vw);
+  height: auto;
+  aspect-ratio: 6 / 1;
+  margin: 8px 0 10px;
+  overflow: visible;
+}
+.hs-hero-copy .hs-heart-rule .hs-draw {
+  animation: hs-draw 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.45s both;
+}
+.hs-hero-copy .hs-heart-rule .hs-draw:nth-child(n + 3) {
+  animation-duration: 0.8s;
+  animation-delay: 1.25s;
+}
+.hs-hero-date {
+  margin: 0;
+  font-size: clamp(15px, 1.5vw, 19px);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--olive);
+}
+.hs-root .hs-hero-lede {
+  max-width: 36ch;
+  margin-top: 14px;
+  color: var(--ink);
+}
+.hs-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 22px;
+}
+.hs-root .hs-hero-statement {
+  margin-top: auto;
+  padding-top: 26px;
+  max-width: 32ch;
+  font-size: clamp(19px, 2vw, 25px);
+  font-style: italic;
+  line-height: 1.35;
+  color: var(--olive-deep);
+}
+
+/* ---------- Capítulo 1 · La playa ---------- */
+.hs-beach {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 440px) minmax(0, 1fr);
+  align-items: center;
+  gap: 24px;
+  padding: calc(var(--bar-h) + 28px) var(--wide) 36px;
+  overflow: hidden;
+  isolation: isolate;
+  background: #ebdbba;
+}
+.hs-beach-scene {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+.hs-beach-svg {
+  width: 100%;
+  height: 100%;
+}
+@media (orientation: portrait) {
+  .hs-only-wide {
+    display: none;
+  }
+}
+@media (orientation: landscape) {
+  .hs-only-tall {
+    display: none;
+  }
+}
+.hs-paper {
+  background: rgba(251, 249, 242, 0.92);
+  border: 1px solid rgba(201, 169, 97, 0.45);
+  border-radius: 24px;
+  padding: clamp(20px, 3vw, 34px);
+  box-shadow: 0 18px 50px rgba(75, 90, 47, 0.14);
+}
+.hs-legend {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font: 600 14px var(--sans);
+  color: var(--ink);
+}
+.hs-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: -1px;
+}
+.hs-dot-a {
+  background: var(--olive);
+}
+.hs-dot-n {
+  background: var(--terra);
+}
+.hs-dot-g {
+  background: #c98f86;
+}
+.hs-dot-v {
+  background: #7f9db4;
+}
+.hs-polaroid {
+  justify-self: end;
+  width: clamp(200px, 22vw, 300px);
+  margin: 0;
+  padding: 12px 12px 10px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(44, 54, 25, 0.28);
+  rotate: 3deg;
+}
+.hs-polaroid img {
+  width: 100%;
+  aspect-ratio: 896 / 1193;
+  object-fit: cover;
+}
+.hs-polaroid figcaption {
+  font-size: 26px;
+  text-align: center;
+  color: var(--olive);
+  margin-top: 6px;
+  line-height: 1.1;
+}
+
+/* ---------- Capítulo 2 · La aventura ---------- */
+.hs-travel {
+  position: relative;
+  background: var(--cream);
+  padding: calc(var(--bar-h) + 32px) 0 44px;
+  overflow: hidden;
+}
+.hs-travel-head {
+  padding: 0 var(--wide);
+  max-width: calc(900px + 2 * var(--gutter));
+}
+.hs-route {
+  position: relative;
+  height: 40px;
+  margin: 20px var(--wide) 6px;
+}
+.hs-route-line {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.hs-plane-run {
+  position: absolute;
+  inset: 4px 32px 4px 0;
+}
+.hs-plane-mover {
+  width: 100%;
+  height: 100%;
+}
+.hs-plane {
+  width: 32px;
+  height: 32px;
+}
+.hs-track {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding: 10px var(--wide) 18px;
+  scroll-padding: 0 var(--wide);
+}
+.hs-track::-webkit-scrollbar {
+  display: none;
+}
+.hs-track-inner {
+  display: flex;
+  gap: 22px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: max-content;
+}
+.hs-stamp {
+  flex: none;
+  width: min(78vw, 300px);
+  scroll-snap-align: start;
+  background: #fff;
+  padding: 10px;
+  border-radius: 6px;
+  outline: 2px dashed rgba(201, 169, 97, 0.55);
+  outline-offset: -6px;
+  box-shadow: 0 14px 34px rgba(75, 90, 47, 0.14);
+  rotate: var(--tilt, 0deg);
+}
+.hs-stamp-0 {
+  --tilt: -1.2deg;
+}
+.hs-stamp-1 {
+  --tilt: 1deg;
+}
+.hs-stamp-2 {
+  --tilt: -0.5deg;
+}
+.hs-stamp-3 {
+  --tilt: 1.4deg;
+}
+.hs-stamp-4 {
+  --tilt: -1deg;
+}
+.hs-stamp-art {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 300 / 190;
+  border-radius: 3px;
+}
+.hs-stamp-body {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: baseline;
+  padding: 12px 8px 8px;
+}
+.hs-stamp-n {
+  grid-row: span 2;
+  font-size: 28px;
+  color: var(--gold-ink);
+}
+.hs-stamp h3 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.15;
+  color: var(--olive-deep);
+}
+.hs-root .hs-stamp p {
+  margin-top: 2px;
+  font-size: 18px;
+  line-height: 1.3;
+}
+.hs-travel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 6px;
+}
+.hs-counter {
+  min-width: 80px;
+  text-align: center;
+  font-size: 17px;
+  color: var(--olive);
+  font-variant-numeric: tabular-nums;
+}
+.hs-travel.is-pinned {
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 28px;
+}
+.hs-travel.is-pinned .hs-track {
+  overflow: visible;
+  scroll-snap-type: none;
+}
+.hs-travel.is-pinned .hs-travel-controls {
+  display: none;
+}
+.hs-travel.is-pinned .hs-stamp {
+  width: clamp(230px, min(24vw, 36vh), 320px);
+}
+
+/* ---------- Frase ---------- */
+.hs-phrase {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(96px, 18vh, 190px) var(--gutter);
+  text-align: center;
+  background:
+    radial-gradient(70% 60% at 50% 40%, rgba(201, 169, 97, 0.16), transparent 70%),
+    var(--olive-deep);
+}
+.hs-root .hs-phrase-text {
+  max-width: 980px;
+  font-size: clamp(28px, 4.2vw, 56px);
+  font-style: italic;
+  line-height: 1.25;
+  color: var(--cream);
+}
+.hs-heart-rule-light {
+  margin-top: 30px;
+}
+
+/* ---------- Capítulo 3 · El sí ---------- */
+.hs-ring {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(24px, 5vw, 80px);
+  padding: clamp(80px, 14vh, 140px) var(--wide);
+  background: var(--cream);
+}
+.hs-ring-svg {
+  width: min(100%, 420px);
+  height: auto;
+  margin: 0 auto;
+  overflow: visible;
+}
+.hs-ring-copy {
+  max-width: 520px;
+}
+
+/* ---------- Capítulo 4 · El hogar ---------- */
+.hs-home {
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(20px, 4vw, 64px);
+  padding: calc(var(--bar-h) + 28px) var(--wide) 36px;
+  background: linear-gradient(#f4efe1, #efe6d1);
+}
+.hs-home-count {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 16px !important;
+  font-size: clamp(20px, 2vw, 26px);
+  color: var(--olive);
+}
+.hs-roll {
+  display: inline-block;
+  height: 1.2em;
+  overflow: hidden;
+  font-size: 1.9em;
+  line-height: 1.2;
+  color: var(--terra-ink);
+}
+.hs-roll-strip {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(-66.6667%);
+}
+.hs-roll-strip b {
+  display: block;
+  height: 1.2em;
+  font-weight: 600;
+}
+.hs-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  font-size: clamp(18px, 1.5vw, 21px);
+  line-height: 1.45;
+  color: var(--ink);
+}
+.hs-steps li {
+  padding-left: 16px;
+  border-left: 2px solid var(--gold);
+}
+.hs-steps b,
+.hs-steps strong {
+  color: var(--olive);
+}
+.hs-home-art {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.hs-home-svg {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  overflow: visible;
+}
+.hs-legend-family {
+  justify-content: center;
+}
+
+/* ---------- Capítulo 5 · La fe ---------- */
+.hs-faith {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(120px, 22vh, 220px) var(--gutter) clamp(90px, 16vh, 160px);
+  text-align: center;
+  background: radial-gradient(120% 80% at 50% 0%, #3e4c25 0%, #222a14 55%, #161b0d 100%);
+  isolation: isolate;
+}
+.hs-rays {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.hs-rays i {
+  position: absolute;
+  top: -8%;
+  left: 50%;
+  width: 16vw;
+  height: 115%;
+  margin-left: -8vw;
+  transform-origin: 50% 0;
+  background: linear-gradient(90deg, transparent, rgba(246, 213, 143, 0.32), transparent);
+  -webkit-mask-image: linear-gradient(#000, transparent 85%);
+  mask-image: linear-gradient(#000, transparent 85%);
+}
+.hs-rays i:nth-child(1) {
+  rotate: -30deg;
+  width: 8vw;
+}
+.hs-rays i:nth-child(2) {
+  rotate: -14deg;
+}
+.hs-rays i:nth-child(3) {
+  rotate: 0deg;
+  width: 22vw;
+  margin-left: -11vw;
+}
+.hs-rays i:nth-child(4) {
+  rotate: 14deg;
+}
+.hs-rays i:nth-child(5) {
+  rotate: 30deg;
+  width: 8vw;
+}
+.hs-faith-copy {
+  max-width: 840px;
+  margin: 0 auto;
+}
+.hs-faith .hs-kicker {
+  color: var(--gold);
+}
+.hs-root .hs-faith h2 {
+  color: var(--cream);
+}
+.hs-root .hs-faith h2 em.script {
+  color: #f2d9a0;
+}
+.hs-root .hs-faith p.serif {
+  color: rgba(251, 249, 242, 0.9);
+}
+
+/* ---------- Momento wow · Lo que Dios juntó ---------- */
+.hs-wow {
+  background: #161b0d;
+}
+.hs-wow-stage {
+  position: relative;
+  height: 100svh;
+  min-height: 520px;
+  overflow: hidden;
+}
+.hs-wow-media {
+  position: absolute;
+  inset: var(--bar-h) 0 0;
+  margin: 0;
+  overflow: hidden;
+  clip-path: inset(5% 16% 0% 16% round 999px 999px 0px 0px);
+}
+.hs-wow-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 42%;
+}
+.hs-wow-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(10, 12, 6, 0.86) 0%, rgba(10, 12, 6, 0.5) 34%, transparent 62%);
+}
+.hs-wow-arch {
+  position: absolute;
+  left: 0;
+  top: var(--bar-h);
+  width: 100%;
+  height: calc(100% - var(--bar-h));
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+  overflow: visible;
+  pointer-events: none;
+}
+.hs-wow-verse {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(26px, 7vh, 72px);
+  width: min(600px, 84vw);
+  margin: 0 auto;
+  text-align: center;
+  color: var(--cream);
+}
+.hs-root .hs-wow-verse p {
+  font-size: clamp(22px, 2.6vw, 34px);
+  font-style: italic;
+  line-height: 1.3;
+}
+.hs-wow-verse span {
+  display: block;
+}
+.hs-wow-verse cite {
+  display: block;
+  margin-top: 14px;
+  font: 700 13px var(--sans);
+  font-style: normal;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+}
+
+/* ---------- Capítulo 6 · El día ---------- */
+.hs-day {
+  position: relative;
+  background: #dce8ee;
+}
+/* El cielo queda fijo detrás del contenido. El margen negativo va en el contenido (no en el cielo):
+   así el cielo nunca se sale de su sección. */
+.hs-day-sky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+}
+.hs-sky {
+  position: absolute;
+  inset: 0;
+}
+.hs-sky-1 {
+  background: linear-gradient(#bfd6e4, #e9f1f2 55%, #f6efe0);
+}
+.hs-sky-2 {
+  background: linear-gradient(#93bfdc, #d6e9f2 55%, #f4f1e4);
+  opacity: 0;
+}
+.hs-sky-3 {
+  background: linear-gradient(#e2b88f, #f3d7b4 50%, #f8ebd6);
+  opacity: 0;
+}
+.hs-sky-4 {
+  background: linear-gradient(#c58c84, #e8a57f 45%, #f5c98e 75%, #f8e3c2);
+  opacity: 0;
+}
+.hs-day-sun {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff3c9 0 30%, rgba(255, 226, 150, 0.55) 45%, rgba(255, 226, 150, 0) 70%);
+  transform: translate3d(12vw, 30vh, 0);
+}
+.hs-day-land {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 22vh;
+}
+.hs-day-clock {
+  position: absolute;
+  left: var(--gutter);
+  top: calc(var(--bar-h) + 18px);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  color: var(--olive-deep);
+  line-height: 0.9;
+}
+.hs-day-clock-t {
+  font-size: clamp(64px, 10vw, 150px);
+  font-variant-numeric: tabular-nums;
+}
+.hs-day-clock-m {
+  font-size: clamp(18px, 2vw, 28px);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.hs-day-content {
+  position: relative;
+  margin-top: -100svh;
+  width: min(600px, 100%);
+  margin-left: auto;
+  margin-right: max(var(--gutter), 8vw);
+  padding: calc(var(--bar-h) + 30px) 0 18vh;
+}
+.hs-day-head {
+  margin-top: 26vh;
+  background: var(--cream);
+  border-radius: 24px;
+  padding: 26px;
+  box-shadow: 0 16px 40px rgba(44, 54, 25, 0.1);
+}
+.hs-day-list {
+  list-style: none;
+  padding: 0;
+  margin: 22vh 0 0;
+  display: grid;
+  gap: 20vh;
+}
+.hs-moment {
+  background: var(--cream);
+  border: 1px solid rgba(201, 169, 97, 0.4);
+  border-radius: 22px;
+  padding: 18px 20px;
+  box-shadow: 0 16px 40px rgba(44, 54, 25, 0.12);
+  transition:
+    transform 0.6s var(--ease-out),
+    box-shadow 0.6s,
+    border-color 0.6s;
+}
+.hs-moment.is-now {
+  border-color: var(--gold);
+  box-shadow:
+    0 0 0 2px rgba(201, 169, 97, 0.6),
+    0 24px 54px rgba(44, 54, 25, 0.18);
+  transform: scale(1.025);
+}
+.hs-moment-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.hs-moment-head img {
+  flex: none;
+  width: 44px;
+  height: 44px;
+}
+.hs-moment-dot {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--gold) 0 22%, rgba(201, 169, 97, 0.22) 24% 100%);
+}
+.hs-root .hs-moment-time {
+  font-size: 15px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--olive);
+}
+.hs-moment h3 {
+  margin: 2px 0 0;
+  font-size: clamp(21px, 1.8vw, 24px);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--olive-deep);
+}
+.hs-moment-place {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(201, 169, 97, 0.6);
+}
+.hs-root .hs-moment-place .script {
+  font-size: clamp(28px, 2.6vw, 34px);
+  line-height: 1.1;
+  color: var(--olive);
+}
+.hs-root .hs-moment-place .serif {
+  margin: 6px 0 14px;
+  font-size: 18px;
+}
+.hs-root .hs-day-thanks {
+  margin: 20vh auto 0;
+  padding: 16px 24px;
+  border-radius: 24px;
+  background: var(--cream);
+  text-align: center;
+  font-size: clamp(30px, 3vw, 42px);
+  line-height: 1.15;
+  color: var(--olive-deep);
+}
+
+/* ---------- Capítulo 7 · Contigo ---------- */
+.hs-you {
+  padding: calc(var(--bar-h) + 40px) var(--wide) clamp(64px, 10vh, 110px);
+  background: var(--paper);
+}
+.hs-you-head {
+  max-width: 760px;
+  margin: 0 auto 34px;
+  text-align: center;
+}
+.hs-bento {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-areas:
+    "rsvp count dress"
+    "rsvp gift gift";
+  gap: 18px;
+  align-items: start;
+}
+.hs-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 28px 22px;
+  border-radius: 26px;
+  border: 1px solid rgba(201, 169, 97, 0.45);
+  background: var(--cream);
+  box-shadow: 0 18px 44px rgba(75, 90, 47, 0.1);
+  text-align: center;
+}
+.hs-card-rsvp {
+  grid-area: rsvp;
+}
+.hs-card-count {
+  grid-area: count;
+}
+.hs-card-dress {
+  grid-area: dress;
+}
+.hs-card-gift {
+  grid-area: gift;
+}
+.hs-card h3.script {
+  margin: 0;
+  font-size: clamp(34px, 3vw, 42px);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--olive);
+}
+.hs-card-dark {
+  background: linear-gradient(160deg, #4b5a2f, #2c3619);
+  color: var(--cream);
+}
+.hs-card-dark h3.script {
+  color: var(--cream);
+}
+.hs-card-sub {
+  margin: 0 0 8px !important;
+  font: 700 13px var(--sans);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.hs-card:not(.hs-card-dark) .hs-card-sub {
+  color: var(--gold-ink);
+}
+.hs-root .hs-card-note {
+  font-size: 18px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+.hs-root .hs-card-dark .hs-card-note {
+  color: rgba(251, 249, 242, 0.9);
+}
+.hs-card .inv-count-boxes {
+  width: 100%;
+}
+.hs-card-links {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 10px;
+}
+.hs-link-light {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 6px;
+  font: 700 13px var(--sans);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-soft);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Componentes de la tarjeta clásica dentro de la v2: tamaños mínimos legibles y táctiles. */
+.hs-root .inv-count-label,
+.hs-root .inv-swatch-name,
+.hs-root .inv-gift-hint,
+.hs-root .inv-gift-bank,
+.hs-root .inv-gift-tip,
+.hs-root .inv-gift-qr-tip,
+.hs-root .inv-form-label,
+.hs-root .inv-guest small {
+  font-size: 12.5px;
+}
+.hs-root .inv-gift-tip {
+  opacity: 1;
+}
+/* El verde #6E7C4D de la tarjeta clásica da 4,3:1 sobre crema: en la v2 los textos pequeños van en oliva. */
+.hs-root .inv-adults,
+.hs-root .inv-gift-hint,
+.hs-root .inv-gift-tip,
+.hs-root .inv-gift-qr-tip,
+.hs-root .inv-gift-bank,
+.hs-root .inv-copy-key,
+.hs-root .inv-form-label,
+.hs-root .inv-guest small,
+.hs-root .inv-link {
+  color: var(--olive);
+}
+.hs-root .inv-adults {
+  font-size: 14px;
+}
+.hs-root .inv-copy-key,
+.hs-root .inv-gift-holder {
+  font-size: 14px;
+}
+.hs-root .inv-seats {
+  color: var(--gold-ink);
+}
+.hs-root .inv-swatch {
+  width: 40px;
+  height: 40px;
+}
+.hs-root .inv-btn-solid,
+.hs-root .inv-pill,
+.hs-root .inv-btn-outline-gold {
+  min-height: 44px;
+}
+.hs-root .inv-btn-outline-gold {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 14px 0 4px;
+  color: var(--gold-soft);
+  border-color: var(--gold-soft);
+}
+.hs-root .inv-stepper button {
+  width: 44px;
+  height: 44px;
+}
+.hs-root .inv-link {
+  min-height: 44px;
+}
+.hs-root .inv-form {
+  max-width: 340px;
+}
+
+/* ---------- Pie ---------- */
+.hs-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 72px var(--gutter) 48px;
+  text-align: center;
+  background: var(--olive-deep);
+  color: var(--cream);
+}
+.hs-footer-line {
+  margin: 10px 0 18px !important;
+  font-size: clamp(38px, 5vw, 62px);
+  line-height: 1.1;
+  color: var(--gold-soft);
+}
+.hs-footer-love {
+  font-size: 21px;
+  font-style: italic;
+  color: rgba(251, 249, 242, 0.88);
+}
+.hs-footer-names {
+  font-size: clamp(24px, 3vw, 32px);
+  letter-spacing: 0.04em;
+}
+.hs-footer-date {
+  margin: 6px 0 20px !important;
+  font: 700 13px var(--sans);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.hs-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 22px;
+}
+.hs-footer-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 4px;
+  font: 600 14px var(--sans);
+  color: var(--cream);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.hs-footer-credit {
+  margin-top: 22px !important;
+  font: 13px var(--sans);
+  color: rgba(251, 249, 242, 0.72);
+}
+
+/* ---------- Tableta ---------- */
+@media (max-width: 1040px) {
+  .hs-bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "rsvp count"
+      "rsvp dress"
+      "gift gift";
+  }
+}
+
+/* ---------- Compacto: celular vertical ---------- */
+@media (max-width: 760px) {
+  .hs-beach {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    align-items: start;
+  }
+  .hs-polaroid {
+    align-self: end;
+    width: min(46vw, 230px);
+    padding: 8px 8px 6px;
+  }
+  .hs-polaroid figcaption {
+    font-size: 21px;
+  }
+  .hs-ring,
+  .hs-home {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .hs-ring-svg {
+    width: min(70vw, 280px);
+  }
+  .hs-home-svg {
+    max-width: 340px;
+  }
+  .hs-day-content {
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+    padding-left: var(--gutter);
+    padding-right: var(--gutter);
+  }
+  .hs-day-list {
+    gap: 16vh;
+  }
+  .hs-bento {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "rsvp" "count" "dress" "gift";
+  }
+  .hs-card {
+    padding: 24px 16px;
+  }
+}
+
+@media (max-width: 520px) {
+  .hs-bar-icon {
+    display: none;
+  }
+  .hs-bar-year {
+    position: static;
+    transform: none;
+    margin-right: auto;
+    align-items: flex-start;
+  }
+  .hs-bar-year small {
+    display: none;
+  }
+  .hs-bar-cta {
+    padding: 10px 14px;
+  }
+}
+
+/* ---------- Pantallas bajas: celular en horizontal ---------- */
+@media (max-height: 500px) {
+  .hs-hero {
+    min-height: auto;
+  }
+  .hs-beach {
+    min-height: auto;
+  }
+  .hs-day-head {
+    margin-top: 10vh;
+  }
+}
+
+/* ---------- Movimiento reducido: todo en su estado final ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .hs-root *,
+  .hs-root *::before,
+  .hs-root *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+html.reduce-motion .hs-root *,
+html.reduce-motion .hs-root *::before,
+html.reduce-motion .hs-root *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+html.reduce-motion .hs-sky-2 {
+  opacity: 1;
+}
