@@ -136,6 +136,9 @@ export async function submitRsvp(input: RsvpInput) {
     });
   }
 
+  // Invitación sin cupo (0): no hay a quién confirmar.
+  if (input.status === "yes" && inv.seats === 0) throw new Error("Sin cupos");
+
   let attending = 0;
   if (input.status === "yes") {
     const people = await db.select().from(guests).where(eq(guests.invitationId, inv.id));
@@ -146,7 +149,7 @@ export async function submitRsvp(input: RsvpInput) {
         await db.update(guests).set({ attending: chosen.has(p.id) }).where(eq(guests.id, p.id));
       }
     } else {
-      attending = Math.max(1, Math.min(inv.seats, input.attending ?? inv.seats));
+      attending = Math.min(inv.seats, Math.max(1, input.attending ?? inv.seats));
     }
   } else {
     await db.update(guests).set({ attending: false }).where(eq(guests.invitationId, inv.id));

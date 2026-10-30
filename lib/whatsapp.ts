@@ -8,9 +8,10 @@ export function invitationMessage(name: string, seats: number, url: string) {
     "",
     "Aquí está tu invitación (ábrela y toca el sobre ✉️):",
     url,
-    "",
-    `Cupo${seats === 1 ? "" : "s"} asignado${seats === 1 ? "" : "s"}: ${seats}`,
-    "Por favor confírmanos tu asistencia desde la invitación.",
+    // Sin cupo (0): la invitación es para compartir la noticia, no se pide confirmar.
+    ...(seats > 0
+      ? ["", `Cupo${seats === 1 ? "" : "s"} asignado${seats === 1 ? "" : "s"}: ${seats}`, "Por favor confírmanos tu asistencia desde la invitación."]
+      : []),
     "",
     "Con cariño,",
     "Norida & Agustín",

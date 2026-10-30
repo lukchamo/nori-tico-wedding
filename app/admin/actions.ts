@@ -22,6 +22,7 @@ const int = (fd: FormData, k: string, min: number, max: number, fallback: number
   const n = parseInt(String(fd.get(k) ?? ""), 10);
   return Number.isFinite(n) ? Math.max(min, Math.min(max, n)) : fallback;
 };
+const show = (v: string | number | null) => (v === 0 ? "0" : v || "—");
 const cleanPhone = (s: string) => s.replace(/\D/g, "").slice(0, 15) || null;
 const cleanTags = (s: string) =>
   s
@@ -58,7 +59,8 @@ export async function createInvitationAction(fd: FormData) {
     .map((l) => l.trim())
     .filter(Boolean)
     .slice(0, 20);
-  const seats = int(fd, "seats", 1, 20, Math.max(1, people.length || 1));
+  // 0 cupos es válido: invitación sin cupo (no pide confirmación ni suma a los totales).
+  const seats = int(fd, "seats", 0, 20, Math.max(1, people.length || 1));
   const category = CATEGORIES.includes(str(fd, "category")) ? str(fd, "category") : "Familia";
   const [inv] = await db
     .insert(invitations)
@@ -92,14 +94,14 @@ export async function updateInvitationAction(id: number, fd: FormData) {
   const next = {
     name: str(fd, "name", 80) || inv.name,
     phone: cleanPhone(str(fd, "phone", 30)),
-    seats: int(fd, "seats", 1, 20, inv.seats),
+    seats: int(fd, "seats", 0, 20, inv.seats),
     category: CATEGORIES.includes(str(fd, "category")) ? str(fd, "category") : inv.category,
     tags: cleanTags(str(fd, "tags")),
   };
   const labels: Record<keyof typeof next, string> = { name: "Nombre", phone: "Teléfono", seats: "Cupos", category: "Categoría", tags: "Etiquetas" };
   const changes = (Object.keys(next) as (keyof typeof next)[])
     .filter((k) => (inv[k] ?? "") !== (next[k] ?? ""))
-    .map((k) => `${labels[k]}: ${inv[k] || "—"} → ${next[k] || "—"}`);
+    .map((k) => `${labels[k]}: ${show(inv[k])} → ${show(next[k])}`);
   if (!changes.length) return;
   await db.update(invitations).set({ ...next, updatedAt: Date.now() }).where(eq(invitations.id, id));
   await logActivity({ invitationId: id, type: "update", author: "Equipo", body: changes.join(" · ") });

@@ -218,7 +218,10 @@ export default async function InvitationDetail({ params }: { params: Params }) {
                 </div>
                 <div className="adm-field">
                   <label htmlFor="f-seats">Cupos</label>
-                  <input id="f-seats" name="seats" type="number" min={1} max={20} className="adm-input" defaultValue={inv.seats} />
+                  <input id="f-seats" name="seats" type="number" min={0} max={20} className="adm-input" defaultValue={inv.seats} aria-describedby="f-seats-hint" />
+                  <small id="f-seats-hint" className="adm-subtle">
+                    0 = sin cupo: no se le pide confirmar
+                  </small>
                 </div>
                 <div className="adm-field">
                   <label htmlFor="f-cat">Categoría</label>
