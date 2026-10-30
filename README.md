@@ -11,7 +11,7 @@ Producción: **https://noridayagustin.com** (dominio propio del Worker; `www.nor
 | `/` | Invitación completa (sobre animado, historia, cuenta regresiva, ceremonia, recepción, itinerario, código de vestimenta, confirmación, lluvia de sobres). Acepta los enlaces antiguos `?nombre=…&cupos=…`. En escritorio (≥ 960 px) se muestra en dos columnas: panel fijo con nombres, fecha, cuenta regresiva y menú de secciones a la izquierda, y la tarjeta a la derecha. |
 | `/i/[código]` | Invitación personalizada: nombre en el sobre, cupos asignados, confirmación por persona y registro de aperturas. `?preview=1` no cuenta como apertura. |
 | `/participacion` | Tarjeta de participación (versión informativa, sin confirmación). |
-| `/asesoras` | Chat "Gabriela y Valentina, asesoras de outfits" (Workers AI, respuesta en streaming). `?i=código` lo personaliza y lo enlaza al invitado. |
+| `/asesoras` | Asistente "Gabriela y Valentina, asesoras de outfits" (Workers AI · Mistral Small 3.1, texto e imagen, en streaming): opciones guiadas para tocar, respuestas con carrusel de looks del lookbook, visor ampliado con prendas y "cómo combinarlo", galería completa con filtros y análisis de la foto del outfit (se optimiza en el navegador y no se guarda). `?i=código` lo personaliza y lo enlaza al invitado. |
 | `/admin` | Backoffice (PIN de 4 dígitos): resumen, embudo, invitados, ficha con comentarios, actividad, chats de la IA, exportar CSV. |
 
 Todo el sitio es **no-index**: `<meta name="robots" content="noindex, nofollow">`, cabecera `X-Robots-Tag` (páginas y archivos estáticos vía `public/_headers`) y `robots.txt` que solo deja pasar a los bots de vista previa (WhatsApp, Facebook, Telegram…). Las imágenes Open Graph están en `public/og/` (1200×630).
@@ -65,6 +65,13 @@ npx wrangler d1 execute DB --remote --file data/private/seed.sql
 ```
 
 El script agrupa por invitado principal, cruza teléfonos y cupos de ambas hojas, y deja notas fijadas en la ficha cuando hay diferencias (teléfono alterno, sin teléfono…). Ojo: ejecutarlo sobre una base con datos duplica las invitaciones.
+
+Lookbook del asistente (26 fotos generadas con FLUX.2 en Workers AI; datos en `lib/lookbook.ts`, prompts en `scripts/lookbook-prompts.tsv`):
+
+```bash
+scripts/gen-lookbook.sh            # genera las que falten
+scripts/gen-lookbook.sh m-boho-azul # regenera una
+```
 
 Imágenes OG e íconos (Playwright):
 

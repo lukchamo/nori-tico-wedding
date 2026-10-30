@@ -1,3 +1,4 @@
+import { ChatTranscript } from "@/components/admin/ChatTranscript";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -259,13 +260,9 @@ export default async function InvitationDetail({ params }: { params: Params }) {
                 <h2>Conversación con las asesoras IA</h2>
                 <span className="adm-subtle">{chat.length} mensajes</span>
               </div>
-              <div className="adm-chat">
-                {chat.map((m) => (
-                  <div key={m.id} className={`m ${m.role}`}>
-                    {m.content}
-                  </div>
-                ))}
-              </div>
+              <div>
+<ChatTranscript messages={chat} />
+</div>
             </section>
           ) : null}
         </div>

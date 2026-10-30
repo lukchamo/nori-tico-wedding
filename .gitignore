@@ -18,3 +18,4 @@ data/private/
 .DS_Store
 *.log
 .env*
+.lookbook-raw/

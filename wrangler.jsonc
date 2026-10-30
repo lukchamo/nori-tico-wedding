@@ -33,7 +33,7 @@
   ],
   "vars": {
     "SITE_URL": "https://noridayagustin.com",
-    "AI_MODEL": "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+    "AI_MODEL": "@cf/mistralai/mistral-small-3.1-24b-instruct"
   },
   "observability": {
     "enabled": true

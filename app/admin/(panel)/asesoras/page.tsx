@@ -1,3 +1,4 @@
+import { ChatTranscript } from "@/components/admin/ChatTranscript";
 import Link from "next/link";
 import { fmtDateTime, fmtRelative } from "@/lib/format";
 import { getChatSessions } from "@/lib/invitations";
@@ -37,13 +38,9 @@ export default async function AsesorasAdmin() {
                     {Math.ceil(Number(s.messages) / 2)} preguntas · {fmtRelative(Number(s.lastAt))}
                   </span>
                 </summary>
-                <div className="adm-chat" style={{ marginTop: 12 }}>
-                  {s.transcript.map((m) => (
-                    <div key={m.id} className={`m ${m.role}`}>
-                      {m.content}
-                    </div>
-                  ))}
-                </div>
+                <div style={{ marginTop: 12 }}>
+<ChatTranscript messages={s.transcript} />
+</div>
               </details>
             </section>
           ))}
