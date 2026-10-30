@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { WEDDING } from "@/lib/config";
+import { sparkle } from "@/lib/effects";
 import { readAiStream } from "@/lib/sse";
 
 type Msg = { role: "user" | "assistant"; content: string };
@@ -136,7 +137,15 @@ export function AdvisorsChat({ code, guestName, backHref, suggestions }: Props) 
         {messages.length === 0 ? (
           <div className="adv-chips">
             {suggestions.map((s) => (
-              <button key={s} type="button" className="adv-chip" onClick={() => ask(s)}>
+              <button
+                key={s}
+                type="button"
+                className="adv-chip"
+                onClick={(e) => {
+                  sparkle(e.currentTarget, ["#C9A961", "#D3A8A0", "#9FB4C7", "#8A9A6B"]);
+                  ask(s);
+                }}
+              >
                 {s}
               </button>
             ))}
@@ -149,6 +158,7 @@ export function AdvisorsChat({ code, guestName, backHref, suggestions }: Props) 
           className="adv-form"
           onSubmit={(e) => {
             e.preventDefault();
+            if (input.trim()) sparkle(e.currentTarget.querySelector(".adv-send"), ["#C9A961", "#D3A8A0", "#9FB4C7", "#8A9A6B"]);
             ask(input);
           }}
         >

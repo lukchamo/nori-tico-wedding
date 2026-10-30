@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { celebrate, softHearts, sparkle } from "@/lib/effects";
 import type { PublicInvitation } from "@/lib/invitations";
 
 type Step = "idle" | "asking" | "yes-form" | "no-form" | "done-yes" | "done-no";
@@ -35,6 +36,10 @@ export function Rsvp({ invitation, legacyName, legacySeats }: Props) {
   );
 
   const needsName = !invitation;
+  // Enlace general sin cupo asignado: la línea de cupo aparece cuando la persona confirma.
+  const [seatsShown, setSeatsShown] = useState<number | null>(invitation?.seats ?? legacySeats ?? null);
+  const seatsLabel = invitation || legacySeats ? "Cupo asignado" : "Cupo confirmado";
+  const submitRef = useRef<HTMLButtonElement>(null);
 
   const toggle = (id: number) => {
     setChecked((prev) => {
@@ -70,9 +75,21 @@ export function Rsvp({ invitation, legacyName, legacySeats }: Props) {
           message,
         }),
       });
-      const data = (await res.json().catch(() => null)) as { attending?: number; error?: string } | null;
+      const data = (await res.json().catch(() => null)) as { attending?: number; code?: string; error?: string } | null;
       if (!res.ok) throw new Error(data?.error ?? "No pudimos guardar tu respuesta.");
       setResult({ attending: data?.attending ?? 0, message: !!message.trim() });
+      if (status === "yes") {
+        celebrate(submitRef.current);
+        if (seatsShown === null) setSeatsShown(data?.attending ?? count);
+      } else {
+        softHearts(submitRef.current);
+      }
+      // Quien confirma desde el enlace general queda con su propio enlace (al recargar ve su respuesta).
+      if (!invitation && data?.code) {
+        try {
+          window.history.replaceState(null, "", `/i/${data.code}`);
+        } catch {}
+      }
       setFromServer(false);
       setStep(status === "yes" ? "done-yes" : "done-no");
     } catch (e) {
@@ -101,16 +118,42 @@ export function Rsvp({ invitation, legacyName, legacySeats }: Props) {
   );
 
   return (
-    <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }} aria-live="polite">
+    <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }} aria-live="polite">
+      {seatsShown !== null ? (
+        <div className="script inv-seats">
+          {seatsLabel}: (
+          <span key={seatsShown} className="inv-pop" style={{ display: "inline-block" }}>
+            {seatsShown}
+          </span>
+          )
+        </div>
+      ) : null}
+      <div className="inv-adults">Con mucho cariño, este será un evento exclusivo para adultos.</div>
+
       {step === "idle" && (
-        <button type="button" onClick={() => setStep("asking")} className="inv-btn-solid" style={{ marginTop: 8, padding: "14px 34px" }}>
+        <button
+          type="button"
+          onClick={(e) => {
+            sparkle(e.currentTarget);
+            setStep("asking");
+          }}
+          className="inv-btn-solid"
+          style={{ marginTop: 8, padding: "14px 34px" }}
+        >
           Confirmar asistencia
         </button>
       )}
 
       {step === "asking" && (
         <div className="inv-rsvp-row">
-          <button type="button" onClick={() => setStep("yes-form")} className="inv-pill inv-pill-solid">
+          <button
+            type="button"
+            onClick={(e) => {
+              sparkle(e.currentTarget);
+              setStep("yes-form");
+            }}
+            className="inv-pill inv-pill-solid"
+          >
             Sí, allí estaré
           </button>
           <button type="button" onClick={() => setStep("no-form")} className="inv-pill inv-pill-ghost">
@@ -171,7 +214,7 @@ export function Rsvp({ invitation, legacyName, legacySeats }: Props) {
           {messageField}
           {error ? <div className="inv-error">{error}</div> : null}
           <div className="inv-form-actions">
-            <button type="submit" className="inv-pill inv-pill-solid" disabled={sending}>
+            <button type="submit" ref={submitRef} className="inv-pill inv-pill-solid" disabled={sending}>
               {sending ? "Enviando…" : "Enviar confirmación"}
             </button>
             <button type="button" className="inv-pill inv-pill-ghost" onClick={() => setStep("asking")} disabled={sending}>
@@ -193,7 +236,7 @@ export function Rsvp({ invitation, legacyName, legacySeats }: Props) {
           {messageField}
           {error ? <div className="inv-error">{error}</div> : null}
           <div className="inv-form-actions">
-            <button type="submit" className="inv-pill inv-pill-solid" disabled={sending}>
+            <button type="submit" ref={submitRef} className="inv-pill inv-pill-solid" disabled={sending}>
               {sending ? "Enviando…" : "Enviar respuesta"}
             </button>
             <button type="button" className="inv-pill inv-pill-ghost" onClick={() => setStep("asking")} disabled={sending}>
@@ -204,7 +247,7 @@ export function Rsvp({ invitation, legacyName, legacySeats }: Props) {
       )}
 
       {step === "done-yes" && (
-        <>
+        <div className="inv-reveal">
           <div className="display inv-thanks">¡Gracias por confirmar! Te esperamos con mucha alegría.</div>
           {result && maxSeats > 1 ? (
             <div className="serif" style={{ fontSize: 15, color: "#6E7C4D", fontStyle: "italic", marginTop: 6 }}>
@@ -219,16 +262,16 @@ export function Rsvp({ invitation, legacyName, legacySeats }: Props) {
           <button type="button" className="inv-link" style={{ marginTop: 14 }} onClick={() => setStep("asking")}>
             Cambiar mi respuesta
           </button>
-        </>
+        </div>
       )}
 
       {step === "done-no" && (
-        <>
+        <div className="inv-reveal">
           <div className="display inv-thanks">Gracias por avisarnos. ¡Te extrañaremos ese día!</div>
           <button type="button" className="inv-link" style={{ marginTop: 14 }} onClick={() => setStep("asking")}>
             Cambiar mi respuesta
           </button>
-        </>
+        </div>
       )}
     </div>
   );

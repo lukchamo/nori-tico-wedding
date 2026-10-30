@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { WEDDING } from "@/lib/config";
+import { giftBurst, sparkle } from "@/lib/effects";
 import { GiftIcon } from "./Ornaments";
 
 function CopyIcon({ size }: { size: number }) {
@@ -21,7 +22,8 @@ function CopyIcon({ size }: { size: number }) {
 function useCopied() {
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const copy = (text: string) => {
+  const copy = (text: string, el?: Element | null) => {
+    sparkle(el);
     try {
       navigator.clipboard?.writeText(text);
     } catch {}
@@ -38,15 +40,17 @@ export function GiftEnvelope() {
   const [keyCopied, copyKey] = useCopied();
   const card = useRef<HTMLDivElement>(null);
 
+  const envBtn = useRef<HTMLButtonElement>(null);
   const toggle = () => {
     const next = !open;
     setOpen(next);
+    if (next) setTimeout(() => giftBurst(envBtn.current), 380);
     if (next) setTimeout(() => card.current?.scrollIntoView({ behavior: "smooth", block: "end" }), 650);
   };
 
   return (
     <div className={open ? "is-gift-open" : undefined} style={{ width: "100%" }}>
-      <button type="button" className="inv-gift-env" onClick={toggle} aria-expanded={open} aria-label="Abrir sobre de regalo">
+      <button type="button" ref={envBtn} className="inv-gift-env" onClick={toggle} aria-expanded={open} aria-label="Abrir sobre de regalo">
         <div className="inv-gift-body">
           <GiftIcon size={26} color="#6E7C4D" width={1.3} />
         </div>
@@ -61,12 +65,12 @@ export function GiftEnvelope() {
       <div className="inv-gift-panel">
         <div className="inv-gift-card" ref={card}>
           <div className="inv-gift-bank">{WEDDING.gift.bank}</div>
-          <button type="button" className={`inv-copy inv-copy-num serif${numCopied ? " is-copied" : ""}`} onClick={() => copyNum(WEDDING.gift.account)}>
+          <button type="button" className={`inv-copy inv-copy-num serif${numCopied ? " is-copied" : ""}`} onClick={(e) => copyNum(WEDDING.gift.account, e.currentTarget)}>
             <span>{WEDDING.gift.account}</span>
             <CopyIcon size={13} />
           </button>
           <div className="inv-gift-holder">{WEDDING.gift.holder}</div>
-          <button type="button" className={`inv-copy inv-copy-key${keyCopied ? " is-copied" : ""}`} onClick={() => copyKey(WEDDING.gift.key)}>
+          <button type="button" className={`inv-copy inv-copy-key${keyCopied ? " is-copied" : ""}`} onClick={(e) => copyKey(WEDDING.gift.key, e.currentTarget)}>
             <span>Llave: {WEDDING.gift.key}</span>
             <CopyIcon size={11} />
           </button>

@@ -3,6 +3,7 @@ import type { PublicInvitation } from "@/lib/invitations";
 import { CountdownBoxes, StickyDays } from "./Countdown";
 import { Cover } from "./Cover";
 import { DressCodeSwatches } from "./DressCode";
+import { FxLink } from "./FxLink";
 import { GiftEnvelope } from "./Gift";
 import { GiftIcon, HeartDot, HeartOutline, SmallSprig, Sprig } from "./Ornaments";
 import { Rsvp } from "./Rsvp";
@@ -19,7 +20,6 @@ type Props = {
 export function InvitationPage({ mode, invitation = null, legacyName, legacySeats, preview }: Props) {
   const full = mode === "invitacion";
   const guestName = invitation?.name ?? legacyName ?? null;
-  const seats = invitation?.seats ?? legacySeats ?? null;
   const advisorsHref = invitation ? `/asesoras?i=${encodeURIComponent(invitation.code)}` : "/asesoras";
 
   return (
@@ -64,13 +64,11 @@ export function InvitationPage({ mode, invitation = null, legacyName, legacySeat
                 <div className="inv-confirm-lead">
                   {guestName ? `${guestName}, nos` : "Nos"} encantaría contar contigo en un día tan especial para nosotros.
                 </div>
-                <div className="script inv-seats">Cupo asignado: ({seats ?? " "})</div>
-                <div className="inv-adults">Con mucho cariño, este será un evento exclusivo para adultos.</div>
                 <Rsvp invitation={invitation} legacyName={legacyName} legacySeats={legacySeats} />
                 <Calendar />
-                <a href={WEDDING.calendarUrl} target="_blank" rel="noopener" className="inv-gcal">
+                <FxLink href={WEDDING.calendarUrl} target="_blank" rel="noopener" className="inv-gcal">
                   Agendar en Google Calendar
-                </a>
+                </FxLink>
                 <SmallSprig />
               </div>
 
@@ -144,9 +142,9 @@ function DesktopAside({ mode, guestName }: { mode: Props["mode"]; guestName: str
           ))}
         </nav>
         {mode === "invitacion" ? (
-          <a href="#confirmar" className="inv-aside-cta">
+          <FxLink href="#confirmar" className="inv-aside-cta">
             Confirmar asistencia
-          </a>
+          </FxLink>
         ) : null}
         <div className="serif inv-aside-hint">Desliza la tarjeta para ver toda la invitación →</div>
       </div>
@@ -156,12 +154,12 @@ function DesktopAside({ mode, guestName }: { mode: Props["mode"]; guestName: str
 
 function MusicButton() {
   return (
-    <a href={WEDDING.spotifyUrl} target="_blank" rel="noopener" className="inv-music" aria-label="Escuchar nuestra canción en Spotify">
+    <FxLink fx="notes" href={WEDDING.spotifyUrl} target="_blank" rel="noopener" className="inv-music" aria-label="Escuchar nuestra canción en Spotify">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4B5A2F" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M9 18V5l12-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM21 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
       </svg>
       <span>Música</span>
-    </a>
+    </FxLink>
   );
 }
 
@@ -302,9 +300,9 @@ function Ceremony({ withDirections }: { withDirections: boolean }) {
       <div className="serif inv-ceremony-time">{WEDDING.ceremony.time}</div>
       <div className="inv-ceremony-note">Ceremonia católica, íntima entre familia y amigos cercanos. Tu compañía en este momento es lo más importante para nosotros.</div>
       {withDirections ? (
-        <a href={WEDDING.ceremony.mapsUrl} target="_blank" rel="noopener" className="inv-btn-outline-light">
+        <FxLink href={WEDDING.ceremony.mapsUrl} target="_blank" rel="noopener" className="inv-btn-outline-light">
           Cómo llegar
-        </a>
+        </FxLink>
       ) : null}
     </div>
   );
@@ -348,9 +346,9 @@ function Reception() {
         </div>
       </a>
 
-      <a href={WEDDING.reception.mapsUrl} target="_blank" rel="noopener" className="inv-btn-solid">
+      <FxLink href={WEDDING.reception.mapsUrl} target="_blank" rel="noopener" className="inv-btn-solid">
         Cómo llegar
-      </a>
+      </FxLink>
       <SmallSprig />
     </div>
   );

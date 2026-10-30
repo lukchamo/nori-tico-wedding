@@ -36,8 +36,13 @@
   box-shadow:
     0 0 60px rgba(75, 90, 47, 0.18),
     inset 0 0 70px rgba(75, 90, 47, 0.05);
-  /* clip (no hidden) para que el contador fijo funcione */
+  /* clip (no hidden) para no crear un contenedor de scroll */
   overflow-x: clip;
+}
+@supports not (overflow: clip) {
+  .inv-card {
+    overflow-x: hidden;
+  }
 }
 
 /* ---------- Música ---------- */
@@ -1322,6 +1327,114 @@ html[data-sticky-bar="1"] .inv-music {
   margin-top: 6px;
 }
 
+/* ---------- Micro-interacciones ---------- */
+@keyframes inv-pop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.inv-pop {
+  animation: inv-pop 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@keyframes inv-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.97);
+  }
+}
+.inv-reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: inv-reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.inv-reveal .inv-thanks {
+  background: linear-gradient(90deg, #4b5a2f, #8a7a3c, #c9a961, #8a7a3c, #4b5a2f);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: inv-shine 3.5s linear infinite;
+}
+@keyframes inv-shine {
+  to {
+    background-position: 200% center;
+  }
+}
+/* El sobre "respira" hasta que lo abren. */
+@keyframes inv-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(-0.6deg);
+  }
+}
+.inv-cover:not(.is-open) .inv-env {
+  animation: inv-float 3.2s ease-in-out infinite;
+}
+.inv-cover:not(.is-open) .inv-env-btn:hover .inv-env {
+  animation-duration: 1.2s;
+}
+.inv-env-btn:active .inv-env {
+  transform: scale(0.97);
+}
+.inv-gift-env {
+  transition: transform 0.25s ease;
+}
+.inv-gift-env:hover {
+  transform: translateY(-3px) rotate(-0.6deg);
+}
+.inv-gift-env:active {
+  transform: scale(0.97);
+}
+.inv-btn-solid,
+.inv-pill,
+.inv-btn-outline-light,
+.inv-btn-outline-gold,
+.inv-aside-cta,
+.inv-music,
+.inv-swatch,
+.inv-copy {
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+.inv-btn-solid:active,
+.inv-pill:active,
+.inv-btn-outline-light:active,
+.inv-btn-outline-gold:active,
+.inv-aside-cta:active,
+.inv-music:active,
+.inv-copy:active {
+  transform: scale(0.95);
+}
+.inv-swatch:hover {
+  transform: scale(1.08);
+}
+.inv-swatch.is-active {
+  transform: scale(1.12);
+}
+.inv-guest {
+  transition:
+    opacity 0.2s ease,
+    transform 0.15s ease,
+    border-color 0.2s ease;
+}
+.inv-guest:active {
+  transform: scale(0.98);
+}
+
 /* ---------- Escritorio: panel fijo a la izquierda + tarjeta a la derecha ---------- */
 .inv-aside {
   display: none;
@@ -1480,8 +1593,12 @@ html[data-sticky-bar="1"] .inv-music {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .inv-aside-bg {
-    animation: none;
+  .inv-aside-bg,
+  .inv-env,
+  .inv-pop,
+  .inv-reveal,
+  .inv-reveal .inv-thanks {
+    animation: none !important;
   }
   .inv-cover,
   .inv-env-flap,

@@ -165,7 +165,7 @@ export async function submitRsvp(input: RsvpInput) {
   if (message) {
     await db.insert(activities).values({ invitationId: inv.id, type: "message", author: inv.name, body: message });
   }
-  return { attending, seats: inv.seats, name: inv.name };
+  return { attending, seats: inv.seats, name: inv.name, code: inv.code };
 }
 
 // ---------------------------------------------------------------- Backoffice

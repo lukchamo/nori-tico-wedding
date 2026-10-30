@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { envelopeBurst } from "@/lib/effects";
 
 type Props = {
   mode: "invitacion" | "participacion";
@@ -11,6 +12,7 @@ type Props = {
 export function Cover({ mode, guestName, trackCode }: Props) {
   const [opened, setOpened] = useState(false);
   const [gone, setGone] = useState(false);
+  const envelope = useRef<HTMLDivElement>(null);
 
   // Registra la visita del invitado (solo navegadores reales: los bots de vista previa no ejecutan JS).
   useEffect(() => {
@@ -26,6 +28,7 @@ export function Cover({ mode, guestName, trackCode }: Props) {
   const open = () => {
     if (opened) return;
     setOpened(true);
+    setTimeout(() => envelopeBurst(envelope.current), 450);
     setTimeout(() => setGone(true), 1300);
   };
 
@@ -44,7 +47,7 @@ export function Cover({ mode, guestName, trackCode }: Props) {
       ) : null}
 
       <button type="button" onClick={open} aria-label={label} className="inv-env-btn">
-        <div className="inv-env">
+        <div className="inv-env" ref={envelope}>
           <div className="inv-env-photo">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/assets/foto-sobre.jpg" alt="Norida y Agustín" />
