@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import { activities, guests, invitations } from "@/db/schema";
 import { loginWithPin, logout, requireAdmin } from "@/lib/auth";
 import { getDb } from "@/lib/db";
+import { sanitizePlan, type FloorPlan } from "@/lib/floor";
+import { saveFloorPlan } from "@/lib/floor-db";
 import { newCode } from "@/lib/format";
 import { logActivity } from "@/lib/invitations";
 
@@ -211,4 +213,39 @@ export async function deleteNoteAction(activityId: number) {
   const db = await getDb();
   await db.delete(activities).where(and(eq(activities.id, activityId), eq(activities.type, "note")));
   refresh();
+}
+
+// ---------------------------------------------------------------- Mesas
+
+const KINDS = new Set(["round", "rect", "head", "dance", "dj", "bar", "buffet", "cake", "photo", "gifts", "entrance", "plant"]);
+
+export async function saveFloorPlanAction(json: string, baseVersion: number) {
+  await requireAdmin();
+  if (json.length > 400_000) return { ok: false as const, error: "El plano es demasiado grande." };
+  let plan: FloorPlan;
+  try {
+    const raw = JSON.parse(json) as FloorPlan;
+    if (!Array.isArray(raw.items) || typeof raw.seats !== "object") throw new Error("forma");
+    const items = raw.items
+      .filter((i) => i && typeof i.id === "string" && KINDS.has(i.kind))
+      .slice(0, 300)
+      .map((i) => ({
+        id: String(i.id).slice(0, 40),
+        kind: i.kind,
+        label: String(i.label ?? "").slice(0, 60),
+        x: Math.round(Number(i.x) || 0),
+        y: Math.round(Number(i.y) || 0),
+        w: Math.max(20, Math.min(2000, Math.round(Number(i.w) || 0))),
+        h: Math.max(20, Math.min(2000, Math.round(Number(i.h) || 0))),
+        r: Math.round(Number(i.r) || 0) % 360,
+        seats: Math.max(0, Math.min(30, Math.round(Number(i.seats) || 0))),
+      }));
+    plan = sanitizePlan({ width: Number(raw.width) || 2400, height: Number(raw.height) || 1600, items, seats: raw.seats });
+  } catch {
+    return { ok: false as const, error: "Plano inválido." };
+  }
+  const res = await saveFloorPlan(plan, baseVersion);
+  if (!res.ok) return { ok: false as const, conflict: true, version: res.version, error: "Otra persona cambió el plano. Recarga para ver la última versión." };
+  revalidatePath("/admin/mesas");
+  return { ok: true as const, version: res.version };
 }

@@ -23,7 +23,8 @@ Todo el sitio es **no-index**: `<meta name="robots" content="noindex, nofollow">
 - **Enviar por WhatsApp:** abre `wa.me` con el mensaje y el enlace personalizado y marca la invitación como enviada.
 - **Ficha del invitado:** datos editables, personas del grupo (asiste / no / ?), respuesta manual, enlace, y **línea de tiempo con comentarios** (fijar, eliminar) junto con aperturas, envíos, confirmaciones, mensajes de los invitados y consultas a la IA.
 - **Actividad:** feed general con filtros y comentarios generales del equipo.
-- **Exportar CSV** con estado, asistentes, mensajes y enlaces.
+- **Exportar CSV** con estado, asistentes, mesa, mensajes y enlaces.
+- **Mesas (`/admin/mesas`):** plano 2D del salón con mesas redondas, rectangulares y de novios, y elementos (pista de baile, DJ, bar, buffet, torta, photobooth, lluvia de sobres, entrada, plantas). Se arrastran, rotan y duplican; cada mesa tiene botones grandes de **+ Silla / − Silla**. Los invitados (o grupos completos) se arrastran a una mesa o silla, o se toca el invitado y luego la mesa (ideal en celular); arrastrar a alguien sentado a otra silla intercambia lugares. Vista **Por mesa** imprimible, deshacer/rehacer (Ctrl+Z), guardado automático en D1 y **propuestas aleatorias de ubicación** que mantienen juntos a los grupos y agrupan por categoría (con opción de agregar las mesas que falten). El plano se guarda como un documento JSON versionado (`floor_plans`) y la ficha de cada invitado muestra su mesa y silla.
 
 Cambiar el PIN:
 

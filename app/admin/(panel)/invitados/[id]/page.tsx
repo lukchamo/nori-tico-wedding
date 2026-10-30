@@ -15,6 +15,7 @@ import { SendButtons } from "@/components/admin/SendButtons";
 import { StagePill } from "@/components/admin/StagePill";
 import { NoteComposer, Timeline } from "@/components/admin/Timeline";
 import { fmtDateTime, fmtPhone, fmtRelative } from "@/lib/format";
+import { getSeatLabels } from "@/lib/floor-db";
 import { getInvitationDetail } from "@/lib/invitations";
 import { siteUrl } from "@/lib/site";
 
@@ -24,7 +25,7 @@ export default async function InvitationDetail({ params }: { params: Params }) {
   const { id } = await params;
   const numId = Number(id);
   if (!Number.isInteger(numId)) notFound();
-  const [data, base] = await Promise.all([getInvitationDetail(numId), siteUrl()]);
+  const [data, base, seatLabels] = await Promise.all([getInvitationDetail(numId), siteUrl(), getSeatLabels()]);
   if (!data) notFound();
   const { invitation: inv, guests, timeline, chat } = data;
   const url = `${base}/i/${inv.code}`;
@@ -127,6 +128,11 @@ export default async function InvitationDetail({ params }: { params: Params }) {
                     <div className="adm-subtle">
                       {g.relation || "—"}
                       {g.isChild && !/niñ/i.test(g.relation) ? " · niño/a" : ""}
+                      {seatLabels.get(g.id) ? (
+                        <Link href="/admin/mesas" className="adm-tag" style={{ marginLeft: 6, textDecoration: "none" }}>
+                          🪑 {seatLabels.get(g.id)!.table} · silla {seatLabels.get(g.id)!.seat}
+                        </Link>
+                      ) : null}
                     </div>
                   </div>
                   <div className="adm-seg" role="group" aria-label={`Asistencia de ${g.name}`}>

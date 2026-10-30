@@ -120,6 +120,14 @@ export async function submitRsvp(input: RsvpInput) {
       })
       .returning();
     inv = created;
+    // Personas del grupo (la persona y sus acompañantes) para que aparezcan en la organización de mesas.
+    await db.insert(guests).values(
+      Array.from({ length: seats }, (_, i) => ({
+        invitationId: created.id,
+        name: i === 0 ? name : `Acompañante ${seats > 2 ? i + " " : ""}de ${name}`,
+        relation: i === 0 ? "" : "Acompañante",
+      })),
+    );
     await db.insert(activities).values({
       invitationId: inv.id,
       type: "created",

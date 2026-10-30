@@ -1,4 +1,5 @@
 import { isAdmin } from "@/lib/auth";
+import { getSeatLabels, getSeatingGuests } from "@/lib/floor-db";
 import { STAGES, listInvitations } from "@/lib/invitations";
 import { siteUrl } from "@/lib/site";
 import { fmtDateTime } from "@/lib/format";
@@ -12,8 +13,10 @@ const cell = (v: unknown) => {
 
 export async function GET() {
   if (!(await isAdmin())) return new Response("No autorizado", { status: 401 });
-  const [rows, base] = await Promise.all([listInvitations(), siteUrl()]);
-  const header = ["Invitado principal", "Categoría", "Cupos", "Teléfono", "Estado", "Asisten", "Mensaje", "Enviada", "Aperturas", "Etiquetas", "Enlace"];
+  const [rows, base, seatLabels, people] = await Promise.all([listInvitations(), siteUrl(), getSeatLabels(), getSeatingGuests()]);
+  const tablesOf = (invitationId: number) =>
+    [...new Set(people.filter((p) => p.invitationId === invitationId).map((p) => seatLabels.get(p.id)?.table).filter(Boolean))].join(" / ");
+  const header = ["Invitado principal", "Categoría", "Cupos", "Teléfono", "Estado", "Asisten", "Mesa", "Mensaje", "Enviada", "Aperturas", "Etiquetas", "Enlace"];
   const lines = rows.map((r) =>
     [
       r.name,
@@ -22,6 +25,7 @@ export async function GET() {
       r.phone,
       STAGES[r.stage].label,
       r.rsvpStatus === "yes" ? r.rsvpAttending : r.rsvpStatus === "no" ? 0 : "",
+      tablesOf(r.id),
       r.rsvpMessage,
       r.sentAt ? fmtDateTime(r.sentAt) : "",
       r.openCount,

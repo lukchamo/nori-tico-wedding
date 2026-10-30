@@ -99,3 +99,11 @@ export const loginAttempts = sqliteTable("login_attempts", {
   windowStart: integer("window_start").notNull(),
   lockedUntil: integer("locked_until"),
 });
+
+/** Plano del salón y ubicación de invitados (un documento JSON versionado). */
+export const floorPlans = sqliteTable("floor_plans", {
+  id: text("id").primaryKey(),
+  data: text("data").notNull(),
+  version: integer("version").notNull().default(1),
+  updatedAt: integer("updated_at").notNull().default(now),
+});
