@@ -19,6 +19,15 @@ Producción: **https://noridayagustin.com** (dominio propio del Worker; `www.nor
 
 Todo el sitio es **no-index**: `<meta name="robots" content="noindex, nofollow">`, cabecera `X-Robots-Tag` (páginas y archivos estáticos vía `public/_headers`) y `robots.txt` que solo deja pasar a los bots de vista previa (WhatsApp, Facebook, Telegram…). Las imágenes Open Graph están en `public/og/` (1200×630).
 
+## Música: «Mi Bendición» (Spotify)
+
+La tarjeta (`/`, `/i/[código]` y `/participacion`) reproduce su canción con el **reproductor oficial de Spotify** (iFrame API), en una barra «Nuestra canción» abajo.
+
+- Suena al tocar el sobre: ese toque es el que permite al navegador reproducir audio. Si el navegador no lo deja (algunos iPhone), aparece «Toca ▶ para escucharla» sobre el reproductor.
+- Quien tiene sesión de Spotify en ese navegador escucha la canción completa; los demás, el fragmento de 30 s que da Spotify, que se repite al terminar.
+- El botón «Música» de arriba pausa o retoma, y la × de la barra la pausa y la cierra. La elección se recuerda en el navegador del invitado. Se pausa si el invitado cambia de pestaña.
+- La canción sale de `WEDDING.spotifyUrl` en `lib/config.ts`.
+
 ## Backoffice (CRM)
 
 - **Acceso:** PIN de 4 dígitos guardado como secreto del Worker (`ADMIN_PASSWORD`). 5 intentos fallidos por IP bloquean 15 minutos. Sesión en cookie firmada (30 días); si cambias el PIN, todas las sesiones se cierran.
