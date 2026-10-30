@@ -18,16 +18,14 @@ Producción: **https://noridayagustin.com** (dominio propio del Worker; `www.nor
 
 Todo el sitio es **no-index**: `<meta name="robots" content="noindex, nofollow">`, cabecera `X-Robots-Tag` (páginas y archivos estáticos vía `public/_headers`) y `robots.txt` que solo deja pasar a los bots de vista previa (WhatsApp, Facebook, Telegram…). Las imágenes Open Graph están en `public/og/` (1200×630).
 
-## Música de fondo
+## Música: «Mi Bendición» (Spotify)
 
-La tarjeta (`/`, `/i/[código]` y `/participacion`) arranca la música al tocar el sobre: ese toque es el que permite al navegador reproducir audio. El botón fijo de arriba a la derecha la activa o la silencia, y la elección se recuerda en el navegador del invitado. El ícono de nota al lado abre su canción («Mi Bendición») en Spotify. La música se pausa si el invitado cambia de pestaña.
+La tarjeta (`/`, `/i/[código]` y `/participacion`) reproduce su canción con el **reproductor oficial de Spotify** (iFrame API), en una barra «Nuestra canción» abajo.
 
-- Pista actual: instrumental creado para el reel de CooWeb (ElevenLabs), preparado para repetirse sin corte, en R2: `musica/fondo-v1.mp3`.
-- Cambiarla (por ejemplo, por el MP3 de su canción si los novios lo envían): subir el archivo con otro nombre y actualizar `WEDDING.music.src` en `lib/config.ts`.
-
-```bash
-npx wrangler r2 object put nori-tico-media/musica/fondo-v2.mp3 --file=cancion.mp3 --content-type=audio/mpeg --remote
-```
+- Suena al tocar el sobre: ese toque es el que permite al navegador reproducir audio. Si el navegador no lo deja (algunos iPhone), aparece «Toca ▶ para escucharla» sobre el reproductor.
+- Quien tiene sesión de Spotify en ese navegador escucha la canción completa; los demás, el fragmento de 30 s que da Spotify, que se repite al terminar.
+- El botón «Música» de arriba pausa o retoma, y la × de la barra la pausa y la cierra. La elección se recuerda en el navegador del invitado. Se pausa si el invitado cambia de pestaña.
+- La canción sale de `WEDDING.spotifyUrl` en `lib/config.ts`.
 
 ## Backoffice (CRM)
 

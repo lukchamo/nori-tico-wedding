@@ -18,9 +18,8 @@ export const WEDDING = {
   },
   spotifyUrl: "https://open.spotify.com/track/5fF0fb0VFihGDHFshDLi2Z?si=-EKuKqRlQU6GJk_LniLdEw",
   songTitle: "Mi Bendición",
-  /** Música de fondo de la tarjeta (en R2). Para cambiarla: subir otro archivo con otro nombre y actualizar `src`. */
+  /** Música del reel de CooWeb, para descargar desde /de-cooweb (en R2). */
   music: {
-    src: "/media/musica/fondo-v1.mp3",
     download: "/media/musica/musica-boda-cooweb.mp3",
   },
   calendarUrl:

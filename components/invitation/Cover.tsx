@@ -62,7 +62,7 @@ export function Cover({ mode, guestName, trackCode }: Props) {
       <div className="inv-cover-hint">
         <div className="display">Toca el sobre</div>
         <div className="serif">{hint}</div>
-        <div className="inv-cover-sound">♪ Con música · sube el volumen</div>
+        <div className="inv-cover-sound">♪ Con nuestra canción · sube el volumen</div>
       </div>
 
       <div className="inv-cover-bottom script">Norida &amp; Agustín</div>
