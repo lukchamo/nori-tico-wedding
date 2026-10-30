@@ -746,10 +746,14 @@
   flex-direction: column;
   transform: translateY(-66.6667%);
 }
+/* Playfair usa cifras de estilo antiguo (el 3 baja de la línea y asomaba sobre el 4):
+   cifras de caja alta y cada una recortada en su propia caja. */
 .hs-roll-strip b {
   display: block;
   height: 1.2em;
+  overflow: hidden;
   font-weight: 600;
+  font-variant-numeric: lining-nums;
 }
 .hs-steps {
   list-style: none;
