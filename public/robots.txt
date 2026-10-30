@@ -1,0 +1,23 @@
+# Sitio privado de una boda: no indexar.
+# Los bots de vista previa (WhatsApp, Facebook, Telegram, etc.) sí pueden leer la página
+# para mostrar la tarjeta con foto al compartir el enlace.
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+User-agent: Slackbot-LinkExpanding
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: *
+Disallow: /
