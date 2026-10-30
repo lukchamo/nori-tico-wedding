@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ogMetadata } from "@/lib/og";
 import Link from "next/link";
 import { NavLinks } from "@/components/admin/NavLinks";
 import { requireAdmin } from "@/lib/auth";
@@ -6,7 +7,7 @@ import { logoutAction } from "../actions";
 import "../admin.css";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "Backoffice · Norida & Agustín" };
+export const metadata: Metadata = ogMetadata("backoffice", { path: "/admin", pageTitle: "Backoffice · Norida & Agustín" });
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   await requireAdmin();
