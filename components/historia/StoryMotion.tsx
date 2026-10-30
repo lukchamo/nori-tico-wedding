@@ -43,6 +43,7 @@ function watchScroll() {
   const clockT = $(".hs-day-clock-t");
   const clockM = $(".hs-day-clock-m");
   const moments = $$(".hs-moment");
+  const compact = matchMedia(COMPACT_QUERY);
   let raf = 0;
   let now = -1;
 
@@ -74,14 +75,16 @@ function watchScroll() {
         best = i;
       }
     });
+    const [t, ...m] = (moments[best]?.dataset.time ?? "").split(" ");
     if (best !== now) {
       moments[now]?.classList.remove("is-now");
       moments[best]?.classList.add("is-now");
       now = best;
-      const [t, ...m] = (moments[best]?.dataset.time ?? "").split(" ");
       if (clockT) clockT.textContent = t;
       if (clockM) clockM.textContent = m.join(" ");
     }
+    // En celular el reloj del cielo quedaría tapado por las tarjetas: la hora va en la barra, donde va el año.
+    if (compact.matches && t && r.top < innerHeight / 2 && r.bottom > innerHeight / 2) setYear(t);
   };
   const onScroll = () => {
     if (!raf) raf = requestAnimationFrame(paint);
@@ -127,12 +130,13 @@ function choreography(gsap: Gsap, ScrollTrigger: ST, compact: boolean, low: bool
   const hero = $(".hs-hero");
   if (fits(hero)) {
     const stmt = $(".hs-hero-statement")!;
-    const dy = () => hero!.clientHeight * 0.5 - (stmt.offsetTop + stmt.offsetHeight / 2);
+    // offsetTop ignora transformaciones: la medida es la misma aunque el pin se recalcule a mitad del recorrido.
+    const dy = () => hero!.clientHeight * 0.46 - ((stmt.offsetParent as HTMLElement).offsetTop + stmt.offsetTop + stmt.offsetHeight / 2);
     gsap
       .timeline({
         scrollTrigger: { trigger: hero, start: "top top", end: "+=110%", pin: true, pinSpacer: $(".hs-hero-pin"), scrub: 0.6, anticipatePin: 1, invalidateOnRefresh: true },
       })
-      .to(".hs-sun", { y: -170, ease: "none", duration: 1 }, 0)
+      .to(".hs-sun", { y: () => -hero!.clientHeight * 0.3, ease: "none", duration: 1 }, 0)
       .to(".hs-hero-copy", { yPercent: -12, opacity: 0, ease: "power2.in", duration: 0.4 }, 0.04)
       .to(stmt, { y: dy, scale: compact ? 1.12 : 1.28, ease: "power2.out", duration: 0.46 }, 0.46)
       .to({}, { duration: 0.1 });
@@ -142,7 +146,7 @@ function choreography(gsap: Gsap, ScrollTrigger: ST, compact: boolean, low: bool
   const reveal = (sel: string) => {
     $$(sel).forEach((h) => {
       const words = splitWords(h);
-      gsap.from(words, { yPercent: 40, rotate: 2, opacity: 0, duration: 0.9, ease: "expo.out", stagger: 0.05, scrollTrigger: { trigger: h, start: "top 86%", once: true } });
+      gsap.from(words, { yPercent: 40, rotate: 2, opacity: 0, duration: 0.9, ease: "expo.out", stagger: 0.05, scrollTrigger: { trigger: h, start: "top 96%", once: true } });
     });
   };
   const drawOnce = (root: Element | null) => {
@@ -253,7 +257,7 @@ function choreography(gsap: Gsap, ScrollTrigger: ST, compact: boolean, low: bool
               setYear(t < tl.labels.y2021 ? "2020" : t < tl.labels.y2022 ? "2021" : "2022");
             },
           }
-        : { trigger: sec, start: "top 70%", end: "bottom 70%", scrub: 0.6 },
+        : { trigger: sec, start: "top 65%", end: "bottom 90%", scrub: 0.6 },
     });
     tl.fromTo($$(".hs-house", sec).slice(0, 2), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.45, ease: "none" }, 0)
       .fromTo($$(".hs-house", sec)[2], { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.45, ease: "none" }, 0.2)
@@ -329,7 +333,7 @@ export function StoryMotion() {
     const offs: (() => void)[] = [watchYears(), watchScroll()];
 
     // Las capas en loop (olas) se pausan fuera de pantalla.
-    const io = pauseOffscreen($$(".hs-hero, .hs-beach"));
+    const io = pauseOffscreen($$(".hs-hero"));
     offs.push(() => io.disconnect());
 
     const COMPACT = matchMedia(COMPACT_QUERY);

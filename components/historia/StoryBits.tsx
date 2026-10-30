@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { OPEN_EVENT } from "@/components/invitation/Music";
 import { onMotion, reduced, toggleMotion } from "@/lib/story-motion";
 
 /** Botón "Pausar animaciones" (WCAG 2.2.2): guarda la preferencia y reconstruye la coreografía. */
@@ -26,6 +27,23 @@ export function MotionToggle() {
       </svg>
     </button>
   );
+}
+
+/**
+ * La canción arranca con el primer toque en la página (en la clásica, al abrir el sobre): el navegador
+ * solo deja sonar audio tras una interacción. Si ese toque es el propio botón de música, lo maneja él.
+ */
+export function MusicAutostart() {
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      removeEventListener("click", onClick, true);
+      if ((e.target as Element | null)?.closest(".inv-music-toggle, .inv-song")) return;
+      dispatchEvent(new Event(OPEN_EVENT));
+    };
+    addEventListener("click", onClick, true);
+    return () => removeEventListener("click", onClick, true);
+  }, []);
+  return null;
 }
 
 /** Registra la apertura de la invitación personalizada (los bots de vista previa no ejecutan JS). */

@@ -6,46 +6,41 @@ const OLIVE = "#4B5A2F";
 const TERRA = "#BF7E5A";
 const GOLD = "#C9A961";
 
-/* ---------- Hero: amanecer sobre el mar con dos hilos que se cruzan ---------- */
+/* ---------- Hero: dos hilos sobre el cielo del amanecer y la orilla abajo ---------- */
 
-export function HeroScene() {
+/** Hilos de fondo (decorativos): cruzan el cielo detrás del texto. */
+export function HeroThreads() {
   return (
-    <svg className="hs-hero-scene" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+    <svg className="hs-hero-threads" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+      <g fill="none" strokeLinecap="round" strokeWidth="2.4">
+        <path pathLength={1} className="hs-draw" d="M-40 330 C260 170 520 210 720 420 C900 610 1180 520 1640 300" stroke={OLIVE} strokeOpacity=".3" />
+        <path pathLength={1} className="hs-draw" d="M-40 560 C300 660 560 520 760 380 C980 230 1240 260 1640 470" stroke={TERRA} strokeOpacity=".34" />
+      </g>
+    </svg>
+  );
+}
+
+/** Mar y arena: una franja en el flujo de la página (el texto nunca queda encima del agua). La arena sigue en el capítulo 1. */
+export function HeroShore() {
+  return (
+    <svg className="hs-shore-svg" viewBox="0 0 1600 300" preserveAspectRatio="xMidYMin slice" aria-hidden="true" focusable="false">
       <defs>
-        <linearGradient id="hs-sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#F8F2E4" />
-          <stop offset=".55" stopColor="#F6E6CF" />
-          <stop offset=".76" stopColor="#F1D3B0" />
-        </linearGradient>
-        <radialGradient id="hs-sunglow">
-          <stop offset="0" stopColor="#F6D58F" stopOpacity=".9" />
-          <stop offset=".45" stopColor="#F3CF94" stopOpacity=".35" />
-          <stop offset="1" stopColor="#F3CF94" stopOpacity="0" />
-        </radialGradient>
         <linearGradient id="hs-sea" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#A9BFCF" />
           <stop offset="1" stopColor="#7F9DB4" />
         </linearGradient>
         <linearGradient id="hs-sand" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#EFE2C6" />
-          <stop offset="1" stopColor="#E6D3AE" />
+          <stop offset=".6" stopColor="#E6D3AE" />
         </linearGradient>
       </defs>
-      <rect width="1600" height="1000" fill="url(#hs-sky)" />
-      <g className="hs-sun">
-        <circle cx="800" cy="800" r="260" fill="url(#hs-sunglow)" />
-        <circle cx="800" cy="800" r="74" fill="#F2C879" />
-      </g>
-      <rect y="760" width="1600" height="240" fill="url(#hs-sea)" />
+      <rect width="1600" height="300" fill="#E6D3AE" />
+      <rect width="1600" height="130" fill="url(#hs-sea)" />
       <g className="hs-loop-x">
-        <path d={`M0 792 q50 -10 100 0 ${"t100 0 ".repeat(31)}`} fill="none" stroke="#FBF9F2" strokeOpacity=".55" strokeWidth="3" />
-        <path d={`M0 826 q80 -12 160 0 ${"t160 0 ".repeat(19)}`} fill="none" stroke="#FBF9F2" strokeOpacity=".4" strokeWidth="2.5" />
+        <path d={`M0 28 q50 -10 100 0 ${"t100 0 ".repeat(31)}`} fill="none" stroke="#FBF9F2" strokeOpacity=".55" strokeWidth="3" />
+        <path d={`M0 64 q80 -12 160 0 ${"t160 0 ".repeat(19)}`} fill="none" stroke="#FBF9F2" strokeOpacity=".4" strokeWidth="2.5" />
       </g>
-      <path d="M0 880 C300 860 520 872 800 866 C1080 860 1300 852 1600 870 L1600 1000 L0 1000 Z" fill="url(#hs-sand)" />
-      <g className="hs-hero-threads" fill="none" strokeLinecap="round" strokeWidth="2.4">
-        <path pathLength={1} className="hs-draw" d="M-40 330 C260 170 520 210 720 420 C900 610 1180 520 1640 300" stroke={OLIVE} strokeOpacity=".32" />
-        <path pathLength={1} className="hs-draw" d="M-40 560 C300 660 560 520 760 380 C980 230 1240 260 1640 470" stroke={TERRA} strokeOpacity=".36" />
-      </g>
+      <path d="M0 120 C300 100 520 112 800 106 C1080 100 1300 92 1600 110 L1600 300 L0 300 Z" fill="url(#hs-sand)" />
     </svg>
   );
 }
@@ -114,7 +109,6 @@ function trail(curve: Curve, step: number, scale: number, side: number, startLef
 type Geometry = {
   w: number;
   h: number;
-  sea: number;
   scale: number;
   step: number;
   him: Curve;
@@ -124,17 +118,17 @@ type Geometry = {
 };
 
 const LANDSCAPE: Geometry = {
-  w: 1600, h: 1000, sea: 250, scale: 1.25, step: 52, gap: 24,
+  w: 1600, h: 1000, scale: 1.25, step: 52, gap: 24,
   him: [[-40, 1060], [260, 900], [560, 720], [790, 600]],
   her: [[1640, 1060], [1340, 890], [1050, 720], [810, 600]],
-  together: [[800, 590], [830, 500], [770, 420], [800, 330]],
+  together: [[800, 590], [830, 440], [770, 260], [800, 70]],
 };
 
 const PORTRAIT: Geometry = {
-  w: 800, h: 1400, sea: 400, scale: 1.15, step: 50, gap: 20,
+  w: 800, h: 1400, scale: 1.15, step: 50, gap: 20,
   him: [[-40, 1460], [130, 1300], [300, 1150], [392, 1040]],
   her: [[840, 1460], [670, 1300], [500, 1150], [408, 1040]],
-  together: [[400, 1030], [420, 900], [380, 760], [400, 600]],
+  together: [[400, 1030], [420, 820], [380, 620], [400, 430]],
 };
 
 function Prints({ g, who }: { g: Geometry; who: "him" | "her" }) {
@@ -151,29 +145,33 @@ function Prints({ g, who }: { g: Geometry; who: "him" | "her" }) {
   );
 }
 
+/** Ondas suaves de la arena (textura estática, deterministas). */
+function ripples(g: Geometry) {
+  const out: string[] = [];
+  for (let y = g.h * 0.08; y < g.h; y += g.h * 0.16) {
+    const x0 = ((y * 7) % 260) - 200;
+    out.push(`M${x0.toFixed(0)} ${y.toFixed(0)} q${g.w * 0.08} -14 ${g.w * 0.16} 0 t${g.w * 0.16} 0`);
+    out.push(`M${(x0 + g.w * 0.6).toFixed(0)} ${(y + g.h * 0.07).toFixed(0)} q${g.w * 0.07} -12 ${g.w * 0.14} 0 t${g.w * 0.14} 0`);
+  }
+  return out;
+}
+
 function BeachSvg({ g, className }: { g: Geometry; className: string }) {
-  // Tira de espuma de exactamente 2× el ancho: el loop se desplaza -50% sin costura.
-  const foam = "t100 0 ".repeat((g.w * 2) / 100 - 1);
   return (
     <svg className={className} viewBox={`0 0 ${g.w} ${g.h}`} preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
       <defs>
-        <linearGradient id={`hs-beach-sea-${g.w}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#7FA2BA" />
-          <stop offset="1" stopColor="#A8C3D2" />
-        </linearGradient>
         <linearGradient id={`hs-beach-sand-${g.w}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#E3CFA6" />
-          <stop offset=".2" stopColor="#EBDBBA" />
+          <stop offset="0" stopColor="#E6D3AE" />
+          <stop offset=".45" stopColor="#EBDBBA" />
           <stop offset="1" stopColor="#F1E5CB" />
         </linearGradient>
       </defs>
       <rect width={g.w} height={g.h} fill={`url(#hs-beach-sand-${g.w})`} />
-      <rect width={g.w} height={g.sea} fill={`url(#hs-beach-sea-${g.w})`} />
-      <g className="hs-loop-x">
-        <path d={`M0 ${g.sea} q50 20 100 0 ${foam} V${g.sea + 40} H0 Z`} fill="#F6F0E2" fillOpacity=".85" />
-        <path d={`M0 ${g.sea - 26} q50 14 100 0 ${foam}`} fill="none" stroke="#FBF9F2" strokeOpacity=".5" strokeWidth="3" />
+      <g fill="none" stroke="#D2BC90" strokeOpacity=".45" strokeWidth="3" strokeLinecap="round">
+        {ripples(g).map((d, i) => (
+          <path key={i} d={d} />
+        ))}
       </g>
-      <rect y={g.sea + 30} width={g.w} height="36" fill="#D8C095" opacity=".35" />
       <Prints g={g} who="him" />
       <Prints g={g} who="her" />
     </svg>

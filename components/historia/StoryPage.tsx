@@ -2,16 +2,20 @@ import { CountdownBoxes } from "@/components/invitation/Countdown";
 import { DressCodeSwatches } from "@/components/invitation/DressCode";
 import { FxLink } from "@/components/invitation/FxLink";
 import { GiftEnvelope } from "@/components/invitation/Gift";
+import { MusicButton } from "@/components/invitation/Music";
 import { Rsvp } from "@/components/invitation/Rsvp";
 import { WEDDING } from "@/lib/config";
 import type { PublicInvitation } from "@/lib/invitations";
 import { REDUCE_MOTION_BOOT } from "@/lib/story-motion";
-import { BeachScene, DaySilhouette, FlightRoute, HeartRule, HeroScene, HomeScene, RingScene, STAMPS, StampArt } from "./scenes";
-import { MotionToggle, TrackView, TravelControls } from "./StoryBits";
+import { BeachScene, DaySilhouette, FlightRoute, HeartRule, HeroShore, HeroThreads, HomeScene, RingScene, STAMPS, StampArt } from "./scenes";
+import { MotionToggle, MusicAutostart, TrackView, TravelControls } from "./StoryBits";
 import { StoryMotion } from "./StoryMotion";
 
 type Props = {
   invitation: PublicInvitation | null;
+  /** Enlaces sin invitación registrada: ?nombre=…&cupos=… (como la tarjeta clásica). */
+  legacyName?: string | null;
+  legacySeats?: number | null;
   /** Vista previa desde el backoffice: no cuenta como apertura. */
   preview?: boolean;
 };
@@ -33,10 +37,19 @@ function splitTime(t: string) {
   return { time, meridiem: rest.join(" ") };
 }
 
-export function StoryPage({ invitation, preview }: Props) {
-  const name = invitation?.name ?? null;
+function classicLink(invitation: PublicInvitation | null, name: string | null, seats: number | null) {
+  if (invitation) return `/i/${encodeURIComponent(invitation.code)}`;
+  const q = new URLSearchParams();
+  if (name) q.set("nombre", name);
+  if (seats) q.set("cupos", String(seats));
+  return q.size ? `/?${q}` : "/";
+}
+
+export function StoryPage({ invitation, legacyName = null, legacySeats = null, preview }: Props) {
+  const name = invitation?.name ?? legacyName;
+  const seats = invitation?.seats ?? legacySeats;
   const advisorsHref = invitation ? `/asesoras?i=${encodeURIComponent(invitation.code)}` : "/asesoras";
-  const classicHref = invitation ? `/i/${encodeURIComponent(invitation.code)}` : "/";
+  const classicHref = classicLink(invitation, legacyName, legacySeats);
   const first = splitTime(WEDDING.itinerary[0].time);
 
   return (
@@ -60,11 +73,7 @@ export function StoryPage({ invitation, preview }: Props) {
           </span>
         </div>
         <div className="hs-bar-actions">
-          <FxLink fx="notes" className="hs-bar-icon" href={WEDDING.spotifyUrl} target="_blank" rel="noopener" aria-label="Escuchar nuestra canción en Spotify">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M9 18V5l12-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM21 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-            </svg>
-          </FxLink>
+          <MusicButton className="hs-music" lazy />
           <a className="hs-btn hs-btn-solid hs-bar-cta" href="#confirmar">
             Confirmar
           </a>
@@ -79,8 +88,15 @@ export function StoryPage({ invitation, preview }: Props) {
         {/* ---------- Hero ---------- */}
         <div className="hs-hero-pin">
           <section className="hs-hero" id="inicio" data-year="2026" aria-labelledby="hs-title">
-            <HeroScene />
+            <HeroThreads />
             <div className="hs-hero-copy">
+              {name || seats ? (
+                <p className="hs-for">
+                  <span className="hs-for-label">Invitación especial{name ? " para" : ""}</span>
+                  {name ? <span className="hs-for-name script">{name}</span> : null}
+                  {seats ? <span className="hs-for-seats">{seats === 1 ? "1 cupo reservado" : `${seats} cupos reservados`}</span> : null}
+                </p>
+              ) : null}
               <p className="hs-kicker">Con la bendición de Dios y nuestros padres</p>
               <h1 id="hs-title" className="hs-names script">
                 Norida <span className="hs-amp">&amp;</span> Agustín
@@ -103,10 +119,17 @@ export function StoryPage({ invitation, preview }: Props) {
                   </svg>
                 </a>
               </div>
+              <p className="hs-hero-sound">♪ Con música · sube el volumen</p>
             </div>
-            <p className="hs-hero-statement serif">
-              Todo empezó con dos caminos que no sabían que iban al <em className="script">mismo lugar</em>.
-            </p>
+            <div className="hs-hero-sky" aria-hidden="true">
+              <i className="hs-sun" />
+            </div>
+            <div className="hs-hero-shore">
+              <HeroShore />
+              <p className="hs-hero-statement serif">
+                Todo empezó con dos caminos que no sabían que iban al <em className="script">mismo lugar</em>.
+              </p>
+            </div>
           </section>
         </div>
 
@@ -271,6 +294,9 @@ export function StoryPage({ invitation, preview }: Props) {
           </div>
         </section>
 
+        {/* Amanecer del 27 de diciembre: de la noche del capítulo de la fe al cielo del día de la boda */}
+        <div className="hs-dawn" aria-hidden="true" />
+
         {/* ---------- Capítulo 6 · El día ---------- */}
         <section className="hs-day" id="el-dia" data-year="2026" aria-labelledby="hs-c6">
           <div className="hs-day-sky" aria-hidden="true">
@@ -351,7 +377,7 @@ export function StoryPage({ invitation, preview }: Props) {
           <div className="hs-bento">
             <div className="hs-card hs-card-rsvp">
               <h3 className="script">Confirma tu asistencia</h3>
-              <Rsvp invitation={invitation} />
+              <Rsvp invitation={invitation} legacyName={legacyName} legacySeats={legacySeats} />
             </div>
 
             <div className="hs-card hs-card-dark hs-card-count">
@@ -399,6 +425,7 @@ export function StoryPage({ invitation, preview }: Props) {
       </footer>
 
       <StoryMotion />
+      <MusicAutostart />
       {invitation && !preview ? <TrackView code={invitation.code} /> : null}
     </div>
   );

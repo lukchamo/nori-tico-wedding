@@ -50,12 +50,19 @@ const writePref = (value: "on" | "off") => {
   } catch {}
 };
 
+type Props = {
+  /** Clase del contenedor del botón (la tarjeta clásica lo flota arriba a la derecha). */
+  className?: string;
+  /** Carga el reproductor de Spotify solo tras la primera interacción (no pesa en la carga inicial). */
+  lazy?: boolean;
+};
+
 /**
  * Su canción de Spotify con el reproductor oficial: suena al abrir el sobre, se ve en una barra abajo
  * y se pausa o retoma con el botón de arriba. Sin sesión de Spotify, el reproductor solo da un
  * fragmento de 30 s: al terminar se repite.
  */
-export function MusicButton() {
+export function MusicButton({ className = "inv-music", lazy = false }: Props) {
   const host = useRef<HTMLDivElement>(null);
   const ctl = useRef<Controller | null>(null);
   const last = useRef<Playback | null>(null);
@@ -68,6 +75,7 @@ export function MusicButton() {
   const [shown, setShown] = useState(false);
   const [needsTap, setNeedsTap] = useState(false);
   const tapTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const load = useRef<() => void>(() => {});
 
   const play = () => {
     wanted.current = true;
@@ -76,6 +84,7 @@ export function MusicButton() {
     const c = ctl.current;
     if (!c) {
       pending.current = true;
+      load.current();
       return;
     }
     const p = last.current;
@@ -99,36 +108,48 @@ export function MusicButton() {
 
   useEffect(() => {
     let alive = true;
+    let started = false;
     const el = document.createElement("div"); // Spotify lo reemplaza por su iframe: fuera del árbol de React
     host.current?.appendChild(el);
-    loadSpotify().then((api) => {
-      if (!alive) return;
-      api.createController(el, { uri: TRACK_URI, width: "100%", height: 80 }, (c) => {
-        c.addListener("ready", () => {
-          ctl.current = c;
-          if (pending.current) {
-            pending.current = false;
-            play();
-          }
-        });
-        c.addListener("playback_update", ({ data }) => {
-          last.current = data;
-          const ended = data.duration > 0 && data.position >= data.duration - 250;
-          if (data.position < 2000) restarting.current = false;
-          // Fin del fragmento o de la canción: vuelve a empezar.
-          if (ended && !data.isPaused && wanted.current && !restarting.current) {
-            restarting.current = true;
-            c.play();
-          }
-          const playing = !data.isPaused && data.duration > 0 && !ended;
-          setOn(playing);
-          if (playing) {
-            setNeedsTap(false);
-            wanted.current = true;
-          } else if (data.isPaused && !document.hidden && Date.now() > grace.current) wanted.current = false; // pausó en el reproductor
+    const start = () => {
+      if (started) return;
+      started = true;
+      removeEventListener("pointerdown", start);
+      removeEventListener("keydown", start);
+      loadSpotify().then((api) => {
+        if (!alive) return;
+        api.createController(el, { uri: TRACK_URI, width: "100%", height: 80 }, (c) => {
+          c.addListener("ready", () => {
+            ctl.current = c;
+            if (pending.current) {
+              pending.current = false;
+              play();
+            }
+          });
+          c.addListener("playback_update", ({ data }) => {
+            last.current = data;
+            const ended = data.duration > 0 && data.position >= data.duration - 250;
+            if (data.position < 2000) restarting.current = false;
+            // Fin del fragmento o de la canción: vuelve a empezar.
+            if (ended && !data.isPaused && wanted.current && !restarting.current) {
+              restarting.current = true;
+              c.play();
+            }
+            const playing = !data.isPaused && data.duration > 0 && !ended;
+            setOn(playing);
+            if (playing) {
+              setNeedsTap(false);
+              wanted.current = true;
+            } else if (data.isPaused && !document.hidden && Date.now() > grace.current) wanted.current = false; // pausó en el reproductor
+          });
         });
       });
-    });
+    };
+    load.current = start;
+    if (lazy) {
+      addEventListener("pointerdown", start, { passive: true });
+      addEventListener("keydown", start);
+    } else start();
 
     const onOpen = () => {
       if (readPref() !== "off") play();
@@ -148,6 +169,8 @@ export function MusicButton() {
     document.addEventListener("visibilitychange", onVisibility);
     return () => {
       alive = false;
+      removeEventListener("pointerdown", start);
+      removeEventListener("keydown", start);
       clearTimeout(tapTimer.current);
       window.removeEventListener(OPEN_EVENT, onOpen);
       document.removeEventListener("visibilitychange", onVisibility);
@@ -175,7 +198,7 @@ export function MusicButton() {
 
   return (
     <>
-      <div className="inv-music">
+      <div className={className}>
         <button
           type="button"
           className={`inv-music-toggle${on ? " is-on" : ""}`}
