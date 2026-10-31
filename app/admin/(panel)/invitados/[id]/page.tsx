@@ -29,6 +29,7 @@ export default async function InvitationDetail({ params }: { params: Params }) {
   if (!data) notFound();
   const { invitation: inv, guests, timeline, chat } = data;
   const url = `${base}/i/${inv.code}`;
+  const participationUrl = `${base}/participacion?i=${inv.code}`;
   const yes = guests.filter((g) => g.attending === true).length;
 
   return (
@@ -64,7 +65,7 @@ export default async function InvitationDetail({ params }: { params: Params }) {
         <div className="adm-row-actions">
           <SendButtons id={inv.id} name={inv.name} phone={inv.phone} seats={inv.seats} url={url} />
           <a className="adm-btn" href={`/i/${inv.code}?preview=1`} target="_blank" rel="noopener">
-            Ver tarjeta
+            {inv.seats === 0 ? "Ver participación" : "Ver tarjeta"}
           </a>
         </div>
       </div>
@@ -100,6 +101,11 @@ export default async function InvitationDetail({ params }: { params: Params }) {
               <code>{url}</code>
               <CopyText text={url} />
             </div>
+            {inv.seats === 0 ? (
+              <p className="adm-subtle" style={{ margin: "8px 0 0" }}>
+                Con 0 cupos este enlace abre la tarjeta de participación: sin itinerario ni confirmación, solo un mensaje para los novios.
+              </p>
+            ) : null}
             {inv.rsvpMessage ? (
               <div className="adm-event message" style={{ borderTop: "none", paddingBottom: 0 }}>
                 <div className="adm-event-icon">💌</div>
@@ -111,6 +117,25 @@ export default async function InvitationDetail({ params }: { params: Params }) {
                 </div>
               </div>
             ) : null}
+          </section>
+
+          <section className="adm-card">
+            <div className="adm-card-title">
+              <h2>Tarjeta de participación</h2>
+            </div>
+            <p className="adm-subtle" style={{ margin: "0 0 10px" }}>
+              Comparte la noticia sin cupos: sin itinerario, recepción ni confirmación. El invitado solo puede enviarles un mensaje, que llega aquí.
+            </p>
+            <div className="adm-link-box">
+              <code>{participationUrl}</code>
+              <CopyText text={participationUrl} label="Copiar enlace" />
+            </div>
+            <div className="adm-row-actions" style={{ marginTop: 10 }}>
+              <SendButtons id={inv.id} name={inv.name} phone={inv.phone} seats={inv.seats} url={participationUrl} kind="participacion" />
+              <a className="adm-btn" href={`/participacion?i=${inv.code}&preview=1`} target="_blank" rel="noopener">
+                Ver participación
+              </a>
+            </div>
           </section>
 
           <section className="adm-card">
@@ -218,7 +243,10 @@ export default async function InvitationDetail({ params }: { params: Params }) {
                 </div>
                 <div className="adm-field">
                   <label htmlFor="f-seats">Cupos</label>
-                  <input id="f-seats" name="seats" type="number" min={1} max={20} className="adm-input" defaultValue={inv.seats} />
+                  <input id="f-seats" name="seats" type="number" min={0} max={20} className="adm-input" defaultValue={inv.seats} aria-describedby="f-seats-hint" />
+                  <small id="f-seats-hint" className="adm-subtle">
+                    0 = sin cupo: no se le pide confirmar
+                  </small>
                 </div>
                 <div className="adm-field">
                   <label htmlFor="f-cat">Categoría</label>

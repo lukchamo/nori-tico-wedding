@@ -136,6 +136,9 @@ export async function submitRsvp(input: RsvpInput) {
     });
   }
 
+  // Invitación sin cupo (0): no hay a quién confirmar.
+  if (input.status === "yes" && inv.seats === 0) throw new Error("Sin cupos");
+
   let attending = 0;
   if (input.status === "yes") {
     const people = await db.select().from(guests).where(eq(guests.invitationId, inv.id));
@@ -146,7 +149,7 @@ export async function submitRsvp(input: RsvpInput) {
         await db.update(guests).set({ attending: chosen.has(p.id) }).where(eq(guests.id, p.id));
       }
     } else {
-      attending = Math.max(1, Math.min(inv.seats, input.attending ?? inv.seats));
+      attending = Math.min(inv.seats, Math.max(1, input.attending ?? inv.seats));
     }
   } else {
     await db.update(guests).set({ attending: false }).where(eq(guests.invitationId, inv.id));
@@ -174,6 +177,21 @@ export async function submitRsvp(input: RsvpInput) {
     await db.insert(activities).values({ invitationId: inv.id, type: "message", author: inv.name, body: message });
   }
   return { attending, seats: inv.seats, name: inv.name, code: inv.code };
+}
+
+/**
+ * Mensaje para los novios desde la tarjeta de participación (sin confirmación).
+ * Con código queda en la línea de tiempo del invitado; desde el enlace general, en la actividad con su nombre.
+ */
+export async function submitMessage(input: { code?: string | null; name?: string | null; message?: string | null }) {
+  const message = input.message?.trim().slice(0, 1000);
+  if (!message) throw new Error("Falta el mensaje");
+  const db = await getDb();
+  const inv = input.code ? await db.query.invitations.findFirst({ where: eq(invitations.code, input.code) }) : undefined;
+  if (input.code && !inv) throw new Error("Invitación no encontrada");
+  const author = inv?.name ?? input.name?.trim().slice(0, 80);
+  if (!author) throw new Error("Falta el nombre");
+  await db.insert(activities).values({ invitationId: inv?.id ?? null, type: "message", author, body: message });
 }
 
 // ---------------------------------------------------------------- Backoffice

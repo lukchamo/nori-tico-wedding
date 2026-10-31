@@ -63,3 +63,11 @@ export function newCode(name: string): string {
   const rand = Array.from(crypto.getRandomValues(new Uint8Array(2)), (b) => b.toString(16).padStart(2, "0")).join("");
   return `${slugify(name) || "invitado"}-${rand}`;
 }
+
+/** Enlaces sin invitación registrada: ?nombre=…&cupos=… (nombre de hasta 80 caracteres, de 1 a 20 cupos). */
+export function legacyInvite(sp: Record<string, string | string[] | undefined>): { name: string | null; seats: number | null } {
+  const name = typeof sp.nombre === "string" ? sp.nombre.trim().slice(0, 80) || null : null;
+  const raw = typeof sp.cupos === "string" ? parseInt(sp.cupos, 10) : NaN;
+  const seats = Number.isFinite(raw) && raw > 0 ? Math.min(raw, 20) : null;
+  return { name, seats };
+}

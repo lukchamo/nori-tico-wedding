@@ -117,6 +117,16 @@ export function Rsvp({ invitation, legacyName, legacySeats }: Props) {
     </>
   );
 
+  // Invitación sin cupo (0 en el backoffice): se comparte la noticia, sin confirmación.
+  if (invitation?.seats === 0) {
+    return (
+      <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+        <div className="display inv-thanks">Queremos compartir contigo la alegría de este día.</div>
+        <div className="inv-adults">Esta invitación no tiene cupos para confirmar.</div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }} aria-live="polite">
       {seatsShown !== null ? (

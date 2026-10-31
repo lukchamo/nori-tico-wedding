@@ -62,7 +62,8 @@ export function GiftEnvelope() {
       </button>
       <div className="inv-gift-hint">{open ? "Toca el sobre para cerrar" : "Toca el sobre para abrir"}</div>
 
-      <div className="inv-gift-panel">
+      {/* Cerrado, el panel es invisible: inert lo saca del recorrido con Tab y del lector de pantalla. */}
+      <div className="inv-gift-panel" inert={!open}>
         <div className="inv-gift-card" ref={card}>
           <div className="inv-gift-bank">{WEDDING.gift.bank}</div>
           <button type="button" className={`inv-copy inv-copy-num serif${numCopied ? " is-copied" : ""}`} onClick={(e) => copyNum(WEDDING.gift.account, e.currentTarget)}>
@@ -82,7 +83,7 @@ export function GiftEnvelope() {
           </div>
           <div className="inv-gift-qr">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/assets/qr-nubank.png" alt={`Código QR Nu Bank, llave ${WEDDING.gift.key}`} />
+            <img src="/assets/qr-nubank.png" width={600} height={600} loading="lazy" decoding="async" alt={`Código QR Nu Bank, llave ${WEDDING.gift.key}`} />
           </div>
           <div className="inv-gift-qr-tip">Escanéalo desde tu app bancaria con Bre-B</div>
         </div>

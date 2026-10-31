@@ -23,7 +23,9 @@ export async function POST(req: Request) {
     });
     return Response.json({ ok: true, attending: result.attending, seats: result.seats, code: result.code });
   } catch (e) {
-    const msg = e instanceof Error && e.message === "Falta el nombre" ? "Escribe tu nombre." : "No pudimos guardar tu respuesta.";
+    const reason = e instanceof Error ? e.message : "";
+    const msg =
+      reason === "Falta el nombre" ? "Escribe tu nombre." : reason === "Sin cupos" ? "Esta invitación no tiene cupos para confirmar." : "No pudimos guardar tu respuesta.";
     return Response.json({ error: msg }, { status: 400 });
   }
 }

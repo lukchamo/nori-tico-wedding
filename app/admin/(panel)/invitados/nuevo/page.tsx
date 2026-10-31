@@ -33,7 +33,10 @@ export default async function NewInvitation({ searchParams }: { searchParams: Se
           </div>
           <div className="adm-field">
             <label htmlFor="n-seats">Cupos</label>
-            <input id="n-seats" name="seats" type="number" min={1} max={20} className="adm-input" placeholder="Por defecto: número de personas" />
+            <input id="n-seats" name="seats" type="number" min={0} max={20} className="adm-input" placeholder="Por defecto: número de personas" aria-describedby="n-seats-hint" />
+            <small id="n-seats-hint" className="adm-subtle">
+              0 = sin cupo: no se le pide confirmar
+            </small>
           </div>
           <div className="adm-field">
             <label htmlFor="n-cat">Categoría</label>

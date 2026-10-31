@@ -13,9 +13,9 @@ type Search = Promise<Record<string, string | string[] | undefined>>;
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { code } = await params;
   const inv = await getPublicInvitation(code);
-  return ogMetadata("invitacion", {
+  return ogMetadata(inv?.seats === 0 ? "participacion" : "invitacion", {
     path: `/i/${code}`,
-    pageTitle: inv ? `${inv.name} · Invitación de boda — Norida & Agustín` : "Invitación de boda — Norida & Agustín",
+    pageTitle: inv ? `${inv.name} · ${inv.seats === 0 ? "Participación de matrimonio" : "Invitación de boda"} — Norida & Agustín` : "Invitación de boda — Norida & Agustín",
     title: inv ? `${inv.name}, nos casamos — Norida & Agustín` : undefined,
   });
 }
@@ -25,5 +25,6 @@ export default async function PersonalInvitation({ params, searchParams }: { par
   const sp = await searchParams;
   const inv = await getPublicInvitation(code);
   if (!inv) notFound();
-  return <InvitationPage mode="invitacion" invitation={inv} preview={sp.preview === "1"} />;
+  // Sin cupos (0): se muestra como tarjeta de participación.
+  return <InvitationPage mode={inv.seats === 0 ? "participacion" : "invitacion"} invitation={inv} preview={sp.preview === "1"} />;
 }

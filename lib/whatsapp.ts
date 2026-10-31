@@ -8,9 +8,27 @@ export function invitationMessage(name: string, seats: number, url: string) {
     "",
     "Aquí está tu invitación (ábrela y toca el sobre ✉️):",
     url,
+    // Sin cupo (0): la invitación es para compartir la noticia, no se pide confirmar.
+    ...(seats > 0
+      ? ["", `Cupo${seats === 1 ? "" : "s"} asignado${seats === 1 ? "" : "s"}: ${seats}`, "Por favor confírmanos tu asistencia desde la invitación."]
+      : []),
     "",
-    `Cupo${seats === 1 ? "" : "s"} asignado${seats === 1 ? "" : "s"}: ${seats}`,
-    "Por favor confírmanos tu asistencia desde la invitación.",
+    "Con cariño,",
+    "Norida & Agustín",
+  ].join("\n");
+}
+
+/** Tarjeta de participación: se comparte la noticia, sin cupos ni confirmación; pueden escribirles un mensaje. */
+export function participationMessage(name: string, url: string) {
+  return [
+    `Hola ${name} 💛`,
+    "",
+    "Con mucha alegría queremos compartir contigo que nos casamos el 27 de diciembre de 2026.",
+    "",
+    "Aquí está nuestra participación de matrimonio (ábrela y toca el sobre ✉️):",
+    url,
+    "",
+    "Si quieres, desde ahí puedes dejarnos un mensaje.",
     "",
     "Con cariño,",
     "Norida & Agustín",

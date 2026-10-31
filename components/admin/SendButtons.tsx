@@ -2,14 +2,24 @@
 
 import { useState, useTransition } from "react";
 import { markSentAction } from "@/app/admin/actions";
-import { invitationMessage, whatsappHref } from "@/lib/whatsapp";
+import { invitationMessage, participationMessage, whatsappHref } from "@/lib/whatsapp";
 
-type Props = { id: number; name: string; phone: string | null; seats: number; url: string; compact?: boolean };
+type Props = {
+  id: number;
+  name: string;
+  phone: string | null;
+  seats: number;
+  url: string;
+  compact?: boolean;
+  /** Con 0 cupos el enlace abre la tarjeta de participación: el mensaje lo dice así. */
+  kind?: "invitacion" | "participacion";
+};
 
-export function SendButtons({ id, name, phone, seats, url, compact }: Props) {
+export function SendButtons({ id, name, phone, seats, url, compact, kind }: Props) {
   const [copied, setCopied] = useState(false);
   const [, startTransition] = useTransition();
-  const text = invitationMessage(name, seats, url);
+  const participation = kind === "participacion" || (kind === undefined && seats === 0);
+  const text = participation ? participationMessage(name, url) : invitationMessage(name, seats, url);
 
   const sendWa = () => {
     window.open(whatsappHref(phone, text), "_blank", "noopener");
