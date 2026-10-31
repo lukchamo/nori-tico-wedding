@@ -18,6 +18,23 @@ export function invitationMessage(name: string, seats: number, url: string) {
   ].join("\n");
 }
 
+/** Tarjeta de participación: se comparte la noticia, sin cupos ni confirmación; pueden escribirles un mensaje. */
+export function participationMessage(name: string, url: string) {
+  return [
+    `Hola ${name} 💛`,
+    "",
+    "Con mucha alegría queremos compartir contigo que nos casamos el 27 de diciembre de 2026.",
+    "",
+    "Aquí está nuestra participación de matrimonio (ábrela y toca el sobre ✉️):",
+    url,
+    "",
+    "Si quieres, desde ahí puedes dejarnos un mensaje.",
+    "",
+    "Con cariño,",
+    "Norida & Agustín",
+  ].join("\n");
+}
+
 export function whatsappHref(phone: string | null | undefined, text: string) {
   const n = waNumber(phone);
   const t = encodeURIComponent(text);

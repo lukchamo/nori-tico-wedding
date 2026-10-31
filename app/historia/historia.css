@@ -1214,6 +1214,13 @@
   gap: 18px;
   align-items: start;
 }
+/* Participación (0 cupos): solo el mensaje y la cuenta regresiva. */
+.hs-bento.hs-bento-message {
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  grid-template-areas: "rsvp count";
+  max-width: 900px;
+  margin: 0 auto;
+}
 .hs-card {
   display: flex;
   flex-direction: column;
@@ -1514,6 +1521,10 @@
   .hs-bento {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: "rsvp" "count" "dress" "gift";
+  }
+  .hs-bento.hs-bento-message {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "rsvp" "count";
   }
   .hs-card {
     padding: 24px 16px;

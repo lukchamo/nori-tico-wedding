@@ -5,6 +5,7 @@ import { Cover } from "./Cover";
 import { DressCodeSwatches } from "./DressCode";
 import { FxLink } from "./FxLink";
 import { GiftEnvelope } from "./Gift";
+import { MessageBox } from "./MessageBox";
 import { MusicButton } from "./Music";
 import { GiftIcon, HeartDot, HeartOutline, SmallSprig, Sprig } from "./Ornaments";
 import { Rsvp } from "./Rsvp";
@@ -25,10 +26,10 @@ export function InvitationPage({ mode, invitation = null, legacyName, legacySeat
 
   return (
     <div className="inv-root">
-      <DesktopAside mode={mode} guestName={full ? guestName : null} />
+      <DesktopAside mode={mode} guestName={guestName} />
       <div className="inv-card">
         <MusicButton />
-        <Cover mode={mode} guestName={full ? guestName : null} trackCode={invitation && !preview ? invitation.code : null} />
+        <Cover mode={mode} guestName={guestName} trackCode={invitation && !preview ? invitation.code : null} />
 
         <div className="inv-content">
           <Hero mode={mode} />
@@ -89,7 +90,16 @@ export function InvitationPage({ mode, invitation = null, legacyName, legacySeat
                 </div>
               </div>
             </>
-          ) : null}
+          ) : (
+            // Participación: sin itinerario ni confirmación; solo un mensaje para los novios.
+            <div className="inv-confirm" id="mensaje">
+              <Sprig />
+              <div className="script inv-confirm-title">Un mensaje para los novios</div>
+              <div className="inv-confirm-lead">{guestName ? `${guestName}, si` : "Si"} quieres, escríbenos unas palabras: nos encantará leerlas.</div>
+              <MessageBox invitation={invitation} />
+              <SmallSprig />
+            </div>
+          )}
 
           <Footer />
         </div>
@@ -110,12 +120,20 @@ const ASIDE_LINKS = {
   participacion: [
     ["#historia", "Nuestra historia"],
     ["#ceremonia", "Ceremonia"],
+    ["#mensaje", "Mensaje para los novios"],
   ],
 } as const;
 
 /** Panel fijo de la vista de escritorio (oculto en móvil). */
 function DesktopAside({ mode, guestName }: { mode: Props["mode"]; guestName: string | null }) {
-  const eyebrow = mode === "participacion" ? "Participación de matrimonio" : guestName ? `Invitación para ${guestName}` : "Nos casamos";
+  const eyebrow =
+    mode === "participacion"
+      ? guestName
+        ? `Participación para ${guestName}`
+        : "Participación de matrimonio"
+      : guestName
+        ? `Invitación para ${guestName}`
+        : "Nos casamos";
   return (
     <aside className="inv-aside" aria-label="Resumen de la boda">
       <div className="inv-aside-bg" />
@@ -146,7 +164,11 @@ function DesktopAside({ mode, guestName }: { mode: Props["mode"]; guestName: str
           <FxLink href="#confirmar" className="inv-aside-cta">
             Confirmar asistencia
           </FxLink>
-        ) : null}
+        ) : (
+          <FxLink href="#mensaje" className="inv-aside-cta">
+            Enviar un mensaje
+          </FxLink>
+        )}
         <div className="serif inv-aside-hint">Desliza la tarjeta para ver toda la invitación →</div>
       </div>
     </aside>

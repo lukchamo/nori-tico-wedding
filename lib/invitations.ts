@@ -179,6 +179,21 @@ export async function submitRsvp(input: RsvpInput) {
   return { attending, seats: inv.seats, name: inv.name, code: inv.code };
 }
 
+/**
+ * Mensaje para los novios desde la tarjeta de participación (sin confirmación).
+ * Con código queda en la línea de tiempo del invitado; desde el enlace general, en la actividad con su nombre.
+ */
+export async function submitMessage(input: { code?: string | null; name?: string | null; message?: string | null }) {
+  const message = input.message?.trim().slice(0, 1000);
+  if (!message) throw new Error("Falta el mensaje");
+  const db = await getDb();
+  const inv = input.code ? await db.query.invitations.findFirst({ where: eq(invitations.code, input.code) }) : undefined;
+  if (input.code && !inv) throw new Error("Invitación no encontrada");
+  const author = inv?.name ?? input.name?.trim().slice(0, 80);
+  if (!author) throw new Error("Falta el nombre");
+  await db.insert(activities).values({ invitationId: inv?.id ?? null, type: "message", author, body: message });
+}
+
 // ---------------------------------------------------------------- Backoffice
 
 export type InvitationRow = Invitation & { stage: Stage; people: number; lastActivityAt: number | null };

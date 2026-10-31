@@ -43,7 +43,7 @@ export function Cover({ mode, guestName, trackCode }: Props) {
 
       {guestName ? (
         <div className="inv-cover-for">
-          <small>Invitación especial para</small>
+          <small>{mode === "participacion" ? "Participación especial para" : "Invitación especial para"}</small>
           <div className="script">{guestName}</div>
         </div>
       ) : null}

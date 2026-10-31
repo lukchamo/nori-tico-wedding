@@ -2,6 +2,7 @@ import { CountdownBoxes } from "@/components/invitation/Countdown";
 import { DressCodeSwatches } from "@/components/invitation/DressCode";
 import { FxLink } from "@/components/invitation/FxLink";
 import { GiftEnvelope } from "@/components/invitation/Gift";
+import { MessageBox } from "@/components/invitation/MessageBox";
 import { MusicButton } from "@/components/invitation/Music";
 import { Rsvp } from "@/components/invitation/Rsvp";
 import { WEDDING } from "@/lib/config";
@@ -51,19 +52,29 @@ export function StoryPage({ invitation, legacyName = null, legacySeats = null, p
   const advisorsHref = invitation ? `/asesoras?i=${encodeURIComponent(invitation.code)}` : "/asesoras";
   const classicHref = classicLink(invitation, legacyName, legacySeats);
   const first = splitTime(WEDDING.itinerary[0].time);
+  // Sin cupos (0): tarjeta de participación. Sin itinerario de la recepción ni confirmación; solo un mensaje.
+  const participation = invitation?.seats === 0;
+  const action = participation ? { href: "#mensaje", label: "Enviar un mensaje", short: "Mensaje" } : { href: "#confirmar", label: "Confirmar asistencia", short: "Confirmar" };
+  const moments = participation ? WEDDING.itinerary.slice(0, 1) : WEDDING.itinerary;
 
   return (
     <div className="hs-root">
       <script dangerouslySetInnerHTML={{ __html: REDUCE_MOTION_BOOT }} />
-      <a className="hs-skip" href="#confirmar">
-        Ir a confirmar asistencia
+      <a className="hs-skip" href={action.href}>
+        Ir a {participation ? "enviar un mensaje" : "confirmar asistencia"}
       </a>
 
       <header className="hs-bar">
         <a className="hs-bar-mono" href="#inicio">
-          <span className="script" aria-hidden="true">N</span>
-          <span className="display" aria-hidden="true">&amp;</span>
-          <span className="script" aria-hidden="true">A</span>
+          <span className="script" aria-hidden="true">
+            N
+          </span>
+          <span className="display" aria-hidden="true">
+            &amp;
+          </span>
+          <span className="script" aria-hidden="true">
+            A
+          </span>
           <span className="sr-only">Norida y Agustín: volver al inicio</span>
         </a>
         <div className="hs-bar-year" aria-hidden="true">
@@ -74,8 +85,8 @@ export function StoryPage({ invitation, legacyName = null, legacySeats = null, p
         </div>
         <div className="hs-bar-actions">
           <MusicButton className="hs-music" lazy />
-          <a className="hs-btn hs-btn-solid hs-bar-cta" href="#confirmar">
-            Confirmar
+          <a className="hs-btn hs-btn-solid hs-bar-cta" href={action.href}>
+            {action.short}
           </a>
           <MotionToggle />
         </div>
@@ -92,7 +103,9 @@ export function StoryPage({ invitation, legacyName = null, legacySeats = null, p
             <div className="hs-hero-copy">
               {name || seats ? (
                 <p className="hs-for">
-                  <span className="hs-for-label">Invitación especial{name ? " para" : ""}</span>
+                  <span className="hs-for-label">
+                    {participation ? "Participación" : "Invitación"} especial{name ? " para" : ""}
+                  </span>
                   {name ? <span className="hs-for-name script">{name}</span> : null}
                   {seats ? <span className="hs-for-seats">{seats === 1 ? "1 cupo reservado" : `${seats} cupos reservados`}</span> : null}
                 </p>
@@ -106,11 +119,12 @@ export function StoryPage({ invitation, legacyName = null, legacySeats = null, p
                 Nos casamos <span aria-hidden="true">·</span> 27 · 12 · 2026
               </p>
               <p className="hs-hero-lede serif">
-                {name ? `${name}, diez` : "Diez"} años, dos caminos y una historia que apenas está comenzando. Recórrela con nosotros: el próximo capítulo lo escribimos juntos.
+                {name ? `${name}, diez` : "Diez"} años, dos caminos y una historia que apenas está comenzando.{" "}
+                {participation ? "Recórrela con nosotros: queremos compartir contigo la alegría de este día." : "Recórrela con nosotros: el próximo capítulo lo escribimos juntos."}
               </p>
               <div className="hs-hero-actions">
-                <a className="hs-btn hs-btn-solid" href="#confirmar">
-                  Confirmar asistencia
+                <a className="hs-btn hs-btn-solid" href={action.href}>
+                  {action.label}
                 </a>
                 <a className="hs-btn hs-btn-ghost" href="#historia">
                   Conocer nuestra historia
@@ -155,7 +169,16 @@ export function StoryPage({ invitation, legacyName = null, legacySeats = null, p
           </div>
           <figure className="hs-polaroid">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/historia/playa-720.webp" srcSet="/historia/playa-720.webp 720w, /historia/playa.webp 896w" sizes="(max-width: 760px) 48vw, 300px" width={896} height={1193} loading="lazy" decoding="async" alt="Norida y Agustín caminan de la mano por la arena, frente al mar" />
+            <img
+              src="/historia/playa-720.webp"
+              srcSet="/historia/playa-720.webp 720w, /historia/playa.webp 896w"
+              sizes="(max-width: 760px) 48vw, 300px"
+              width={896}
+              height={1193}
+              loading="lazy"
+              decoding="async"
+              alt="Norida y Agustín caminan de la mano por la arena, frente al mar"
+            />
             <figcaption className="script">Y desde entonces, juntos</figcaption>
           </figure>
         </section>
@@ -167,7 +190,9 @@ export function StoryPage({ invitation, legacyName = null, legacySeats = null, p
             <h2 id="hs-c2" data-split>
               Y ahí mismo empezó la <em className="script">aventura</em>
             </h2>
-            <p className="serif">Maletas siempre listas: Santa Marta, Cartagena, el Tayrona, Medellín, San Andrés, Pereira, Quindío… parapente, cable vuelo, montañas rusas y lo que se atravesara.</p>
+            <p className="serif">
+              Maletas siempre listas: Santa Marta, Cartagena, el Tayrona, Medellín, San Andrés, Pereira, Quindío… parapente, cable vuelo, montañas rusas y lo que se atravesara.
+            </p>
           </div>
           <FlightRoute />
           <div className="hs-track" id="hs-track" role="region" aria-label="Galería de viajes: desliza horizontalmente" tabIndex={0}>
@@ -279,7 +304,16 @@ export function StoryPage({ invitation, legacyName = null, legacySeats = null, p
           <div className="hs-wow-stage">
             <figure className="hs-wow-media">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/historia/arco-720.webp" srcSet="/historia/arco-720.webp 720w, /historia/arco.webp 1045w" sizes="(max-width: 760px) 100vw, 70vw" width={1045} height={1400} loading="lazy" decoding="async" alt="Norida y Agustín se besan bajo un arco, con el mar al fondo" />
+              <img
+                src="/historia/arco-720.webp"
+                srcSet="/historia/arco-720.webp 720w, /historia/arco.webp 1045w"
+                sizes="(max-width: 760px) 100vw, 70vw"
+                width={1045}
+                height={1400}
+                loading="lazy"
+                decoding="async"
+                alt="Norida y Agustín se besan bajo un arco, con el mar al fondo"
+              />
             </figure>
             <svg className="hs-wow-arch" aria-hidden="true" focusable="false">
               <path className="hs-arch-half" pathLength={1} stroke="#C9A961" />
@@ -320,7 +354,7 @@ export function StoryPage({ invitation, legacyName = null, legacySeats = null, p
               <p className="serif">El día en que serás parte de nuestra mayor muestra de amor: la Bendición de nuestro hogar.</p>
             </div>
             <ol className="hs-day-list">
-              {WEDDING.itinerary.map((step, i) => {
+              {moments.map((step, i) => {
                 const icon = ITINERARY_ICONS[i];
                 const ceremony = i === 0;
                 const reception = i === 1;
@@ -341,10 +375,16 @@ export function StoryPage({ invitation, legacyName = null, legacySeats = null, p
                     {ceremony ? (
                       <div className="hs-moment-place">
                         <p className="script">{WEDDING.ceremony.place}</p>
-                        <p className="serif">Ceremonia católica, íntima entre familia y amigos cercanos. Tu compañía en este momento es lo más importante para nosotros.</p>
-                        <FxLink className="hs-btn hs-btn-solid hs-btn-sm" href={WEDDING.ceremony.mapsUrl} target="_blank" rel="noopener">
-                          Cómo llegar a la iglesia
-                        </FxLink>
+                        <p className="serif">
+                          {participation
+                            ? "Ceremonia católica, íntima entre familia y amigos cercanos."
+                            : "Ceremonia católica, íntima entre familia y amigos cercanos. Tu compañía en este momento es lo más importante para nosotros."}
+                        </p>
+                        {participation ? null : (
+                          <FxLink className="hs-btn hs-btn-solid hs-btn-sm" href={WEDDING.ceremony.mapsUrl} target="_blank" rel="noopener">
+                            Cómo llegar a la iglesia
+                          </FxLink>
+                        )}
                       </div>
                     ) : null}
                     {reception ? (
@@ -360,24 +400,43 @@ export function StoryPage({ invitation, legacyName = null, legacySeats = null, p
                 );
               })}
             </ol>
-            <p className="hs-day-thanks script">Gracias por acompañarnos cada minuto de este día</p>
+            {participation ? null : <p className="hs-day-thanks script">Gracias por acompañarnos cada minuto de este día</p>}
           </div>
         </section>
 
         {/* ---------- Capítulo 7 · Contigo ---------- */}
-        <section className="hs-you" id="confirmar" data-year="2026" aria-labelledby="hs-c7">
+        <section className="hs-you" id={participation ? "mensaje" : "confirmar"} data-year="2026" aria-labelledby="hs-c7">
           <div className="hs-you-head">
             <p className="hs-kicker">Capítulo 07 · Contigo</p>
-            <h2 id="hs-c7" data-split>
-              El próximo capítulo lo escribimos <em className="script">contigo</em>
-            </h2>
-            <p className="serif">{name ? `${name}, nos` : "Nos"} encantaría contar contigo en un día tan especial para nosotros.</p>
+            {participation ? (
+              <h2 id="hs-c7" data-split>
+                Gracias por ser parte de nuestra <em className="script">historia</em>
+              </h2>
+            ) : (
+              <h2 id="hs-c7" data-split>
+                El próximo capítulo lo escribimos <em className="script">contigo</em>
+              </h2>
+            )}
+            <p className="serif">
+              {participation
+                ? `${name ? `${name}, si` : "Si"} quieres, escríbenos unas palabras: nos encantará leerlas.`
+                : `${name ? `${name}, nos` : "Nos"} encantaría contar contigo en un día tan especial para nosotros.`}
+            </p>
           </div>
 
-          <div className="hs-bento">
+          <div className={`hs-bento${participation ? " hs-bento-message" : ""}`}>
             <div className="hs-card hs-card-rsvp">
-              <h3 className="script">Confirma tu asistencia</h3>
-              <Rsvp invitation={invitation} legacyName={legacyName} legacySeats={legacySeats} />
+              {participation ? (
+                <>
+                  <h3 className="script">Un mensaje para los novios</h3>
+                  <MessageBox invitation={invitation} />
+                </>
+              ) : (
+                <>
+                  <h3 className="script">Confirma tu asistencia</h3>
+                  <Rsvp invitation={invitation} legacyName={legacyName} legacySeats={legacySeats} />
+                </>
+              )}
             </div>
 
             <div className="hs-card hs-card-dark hs-card-count">
@@ -385,28 +444,36 @@ export function StoryPage({ invitation, legacyName = null, legacySeats = null, p
               <p className="hs-card-sub">para celebrar nuestro amor</p>
               <CountdownBoxes />
               <div className="hs-card-links">
-                <FxLink href={WEDDING.calendarUrl} target="_blank" rel="noopener" className="hs-link-light">
-                  Agendar en Google Calendar
-                </FxLink>
+                {participation ? null : (
+                  <FxLink href={WEDDING.calendarUrl} target="_blank" rel="noopener" className="hs-link-light">
+                    Agendar en Google Calendar
+                  </FxLink>
+                )}
                 <FxLink fx="notes" href={WEDDING.spotifyUrl} target="_blank" rel="noopener" className="hs-link-light">
                   Escuchar nuestra canción
                 </FxLink>
               </div>
             </div>
 
-            <div className="hs-card hs-card-dark hs-card-dress">
-              <h3 className="script">{WEDDING.dressCode}</h3>
-              <p className="hs-card-sub">Código de vestimenta</p>
-              <p className="serif hs-card-note">Es una boda de día: te sugerimos colores frescos y luminosos.</p>
-              <DressCodeSwatches advisorsHref={advisorsHref} />
-              <p className="serif hs-card-note">Nos reservamos el blanco y el marfil.</p>
-            </div>
+            {participation ? null : (
+              <>
+                <div className="hs-card hs-card-dark hs-card-dress">
+                  <h3 className="script">{WEDDING.dressCode}</h3>
+                  <p className="hs-card-sub">Código de vestimenta</p>
+                  <p className="serif hs-card-note">Es una boda de día: te sugerimos colores frescos y luminosos.</p>
+                  <DressCodeSwatches advisorsHref={advisorsHref} />
+                  <p className="serif hs-card-note">Nos reservamos el blanco y el marfil.</p>
+                </div>
 
-            <div className="hs-card hs-card-gift">
-              <h3 className="script">Lluvia de sobres</h3>
-              <p className="serif hs-card-note">Tu presencia es el mejor regalo, pero si deseas hacernos un detalle para nuestro nuevo hogar y luna de miel, aquí puedes contribuir.</p>
-              <GiftEnvelope />
-            </div>
+                <div className="hs-card hs-card-gift">
+                  <h3 className="script">Lluvia de sobres</h3>
+                  <p className="serif hs-card-note">
+                    Tu presencia es el mejor regalo, pero si deseas hacernos un detalle para nuestro nuevo hogar y luna de miel, aquí puedes contribuir.
+                  </p>
+                  <GiftEnvelope />
+                </div>
+              </>
+            )}
           </div>
         </section>
       </main>
@@ -418,8 +485,8 @@ export function StoryPage({ invitation, legacyName = null, legacySeats = null, p
         <p className="hs-footer-names display">Norida &amp; Agustín</p>
         <p className="hs-footer-date">27 de diciembre de 2026</p>
         <nav className="hs-footer-nav" aria-label="Más de la boda">
-          <a href={classicHref}>Ver la invitación clásica</a>
-          <a href={advisorsHref}>Asesoras de outfits</a>
+          <a href={classicHref}>{participation ? "Ver la tarjeta clásica" : "Ver la invitación clásica"}</a>
+          {participation ? null : <a href={advisorsHref}>Asesoras de outfits</a>}
         </nav>
         <p className="hs-footer-credit">Invitación interactiva hecha con cariño por CooWeb</p>
       </footer>
